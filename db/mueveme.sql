@@ -11,8 +11,8 @@ CREATE TABLE usuarios
     , primer_apellido  VARCHAR(100)
     , segundo_apellido VARCHAR(100)
     , nombre           VARCHAR(32)  NOT NULL UNIQUE
-                                    CONSTRAINT ck_login_sin_espacios
-                                    CHECK (login NOT LIKE '% %')
+                                    CONSTRAINT ck_nombre_sin_espacios
+                                    CHECK (nombre NOT LIKE '% %')
     , password         VARCHAR(60)  NOT NULL
     , email            VARCHAR(255) NOT NULL  -- ¿Le ponemos restricción con un patrón para email? --
     , created_at       TIMESTAMP    DEFAULT CURRENT_TIMESTAMP
@@ -48,7 +48,7 @@ CREATE TABLE comentarios
     , usuario_id    BIGINT    NOT NULL REFERENCES usuarios(id)
     , noticia_id    BIGINT    NOT NULL REFERENCES noticias(id)
     , comentario_id BIGINT    REFERENCES comentarios(id)
-    , created_at    TIMESTAMP    DEFAULT CURRENT_TIMESTAMP
+    , created_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 DROP TABLE IF EXISTS votos CASCADE;
@@ -57,6 +57,7 @@ CREATE TABLE votos
 (
       usuario_id    BIGINT REFERENCES usuarios(id)
     , comentario_id BIGINT REFERENCES comentarios(id)
+    , votacion      BOOL   NOT NULL
     , PRIMARY KEY(usuario_id, comentario_id)
 );
 
@@ -102,16 +103,16 @@ INSERT INTO comentarios (texto, usuario_id, noticia_id, comentario_id)
           , ('Pues a mi no me gusra', 3, 3, 1)
           , ('Lo de la hipertensión es una mierda', 1, 3, null);
 
-INSERT INTO votos (usuario_id, comentario_id)
-     VALUES (1, 2)
-          , (1, 3)
-          , (2, 3)
-          , (2, 1)
-          , (3, 1)
-          , (4, 1)
-          , (4, 2)
-          , (4, 3)
-          , (1, 4);
+INSERT INTO votos (usuario_id, comentario_id, votacion)
+     VALUES (1, 2, true)
+          , (1, 3, true)
+          , (2, 3, false)
+          , (2, 1, true)
+          , (3, 1, false)
+          , (4, 1, false)
+          , (4, 2, true)
+          , (4, 3, false)
+          , (1, 4, true);
 
 INSERT INTO movimientos (usuario_id, noticia_id)
      VALUES (1, 2)
