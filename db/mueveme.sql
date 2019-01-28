@@ -68,6 +68,7 @@ INSERT INTO usuarios (nombre, primer_apellido, segundo_apellido, login, password
      VALUES ('Jonatan', 'Cerezuela', 'López', 'joni_182', crypt('joni', gen_salt('bf', 10)),'jcerezuelalopez@gmail.com')
           , ('Juan', 'Perez', null, 'juan', crypt('juan', gen_salt('bf', 10)), 'Juan@Juan.com')
           , ('María', 'Villa', 'Maceas', 'maria', crypt('maria', gen_salt('bf', 10)), 'María@María.com')
+          , ('Jose', 'Gallego', 'Martel', 'jsmr95', crypt('jose', gen_salt('bf', 10)), 'josema.g.m.95@hotmail.com')
           , ('Pepe', 'Mato', 'López', 'pepe', crypt('pepe', gen_salt('bf', 10)), 'Pepe@Pepe.com');
 
 INSERT INTO noticias (titulo, descripcion, url, usuario_id)
