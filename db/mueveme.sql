@@ -71,6 +71,7 @@ CREATE TABLE movimientos
 
 INSERT INTO usuarios (nombre,password)
      VALUES ('joni_182', crypt('joni', gen_salt('bf', 10)))
+          , ('admin', crypt('admin', gen_salt('bf', 10)))
           , ('juan', crypt('juan', gen_salt('bf', 10)))
           , ('maria', crypt('maria', gen_salt('bf', 10)))
           , ('jose', crypt('jose', gen_salt('bf', 10)))

@@ -20,21 +20,6 @@ use Yii;
  */
 class Usuarios extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
 {
-  public $id;
-  public $nombre;
-  public $password;
-  public $authKey;
-  public $accessToken;
-
-  private static $users = [
-      '100' => [
-          'id' => '100',
-          'nombre' => 'admin',
-          'password' => 'admin',
-          'authKey' => 'test100key',
-          'accessToken' => '100-token',
-      ],
-  ];
 
 
   /**
