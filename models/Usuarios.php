@@ -23,7 +23,8 @@ use Yii;
  * @property Votos[] $votos
  * @property Comentarios[] $comentarios0
  */
-class Usuarios extends \yii\db\ActiveRecord
+ 
+class Usuarios extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
 {
     /**
      * {@inheritdoc}
