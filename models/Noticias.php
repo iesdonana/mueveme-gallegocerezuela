@@ -51,11 +51,12 @@ class Noticias extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'titulo' => 'Titulo',
-            'descripcion' => 'Descripcion',
+            'titulo' => 'Cabecera',
+            'descripcion' => 'Descripción',
             'url' => 'Url',
-            'usuario_id' => 'Usuario ID',
-            'created_at' => 'Created At',
+            'categoria_id' => 'Categoria',
+            'usuario_id' => 'Usuario',
+            'created_at' => 'Creado el',
         ];
     }
 

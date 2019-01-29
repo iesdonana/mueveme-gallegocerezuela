@@ -18,7 +18,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'url')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'usuario_id')->textInput() ?>
+    <?= $form->field($model, 'usuario_id')->hiddenInput()->label(false) ?>
 
     <?= $form->field($model, 'categoria_id')->dropDownList(\app\models\Categorias::categoriasDisponibles()) ?>
 
