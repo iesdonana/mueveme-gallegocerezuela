@@ -9,12 +9,7 @@ use Yii;
  *
  * @property int $id
  * @property string $nombre
- * @property string $primer_apellido
- * @property string $segundo_apellido
- * @property string $login
  * @property string $password
- * @property string $email
- * @property string $created_at
  *
  * @property Comentarios[] $comentarios
  * @property Movimientos[] $movimientos
@@ -23,8 +18,72 @@ use Yii;
  * @property Votos[] $votos
  * @property Comentarios[] $comentarios0
  */
-class Usuarios extends \yii\db\ActiveRecord
+class Usuarios extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
 {
+
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function findIdentity($id)
+  {
+      return static::findOne($id);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function findIdentityByAccessToken($token, $type = null)
+  {
+
+  }
+
+  /**
+   * Finds user by nombre
+   *
+   * @param string $nombre
+   * @return static|null
+   */
+  public static function findByUsername($nombre)
+  {
+      return static::findOne(['nombre' => $nombre]);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getId()
+  {
+      return $this->id;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getAuthKey()
+  {
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function validateAuthKey($authKey)
+  {
+  }
+
+  /**
+   * Validates password
+   *
+   * @param string $password password to validate
+   * @return bool if password provided is valid for current user
+   */
+  public function validatePassword($password)
+  {
+    // if (is_null($this->password)) {
+    //   return false;
+    // }
+      return Yii::$app->getSecurity()->validatePassword($password, $this->password);
+  }
     /**
      * {@inheritdoc}
      */
@@ -39,13 +98,10 @@ class Usuarios extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['login', 'password', 'email'], 'required'],
-            [['created_at'], 'safe'],
-            [['nombre', 'primer_apellido', 'segundo_apellido'], 'string', 'max' => 100],
-            [['login'], 'string', 'max' => 50],
+            [['nombre', 'password'], 'required'],
+            [['nombre'], 'string', 'max' => 32],
             [['password'], 'string', 'max' => 60],
-            [['email'], 'string', 'max' => 255],
-            [['login'], 'unique'],
+            [['nombre'], 'unique'],
         ];
     }
 
@@ -57,12 +113,7 @@ class Usuarios extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'nombre' => 'Nombre',
-            'primer_apellido' => 'Primer Apellido',
-            'segundo_apellido' => 'Segundo Apellido',
-            'login' => 'Login',
             'password' => 'Password',
-            'email' => 'Email',
-            'created_at' => 'Created At',
         ];
     }
 

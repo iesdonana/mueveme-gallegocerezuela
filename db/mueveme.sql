@@ -6,16 +6,11 @@ DROP TABLE IF EXISTS usuarios CASCADE;
 
 CREATE TABLE usuarios
 (
-      id               BIGSERIAL    PRIMARY KEY
-    , nombre_usuario   VARCHAR(100)
-    , primer_apellido  VARCHAR(100)
-    , segundo_apellido VARCHAR(100)
-    , nombre           VARCHAR(32)  NOT NULL UNIQUE
-                                    CONSTRAINT ck_nombre_sin_espacios
-                                    CHECK (nombre NOT LIKE '% %')
-    , password         VARCHAR(60)  NOT NULL
-    , email            VARCHAR(255) NOT NULL  -- ¿Le ponemos restricción con un patrón para email? --
-    , created_at       TIMESTAMP    DEFAULT CURRENT_TIMESTAMP
+      id        BIGSERIAL    PRIMARY KEY
+    , nombre    VARCHAR(32) NOT NULL UNIQUE
+                  CONSTRAINT ck_login_sin_espacios
+                  CHECK (nombre NOT LIKE '% %')
+    , password  VARCHAR(60) NOT NULL
 );
 
 DROP TABLE IF EXISTS categorias CASCADE;
@@ -74,12 +69,13 @@ CREATE TABLE movimientos
 -- Datos de prueba --
 ---------------------
 
-INSERT INTO usuarios (nombre_usuario, primer_apellido, segundo_apellido, nombre, password, email)
-     VALUES ('Jonatan', 'Cerezuela', 'López', 'joni_182', crypt('joni', gen_salt('bf', 10)),'jcerezuelalopez@gmail.com')
-          , ('Juan', 'Perez', null, 'juan', crypt('juan', gen_salt('bf', 10)), 'Juan@Juan.com')
-          , ('María', 'Villa', 'Maceas', 'maria', crypt('maria', gen_salt('bf', 10)), 'María@María.com')
-          , ('Jose', 'Gallego', 'Martel', 'jsmr95', crypt('jose', gen_salt('bf', 10)), 'josema.g.m.95@hotmail.com')
-          , ('Pepe', 'Mato', 'López', 'pepe', crypt('pepe', gen_salt('bf', 10)), 'Pepe@Pepe.com');
+INSERT INTO usuarios (nombre,password)
+     VALUES ('joni_182', crypt('joni', gen_salt('bf', 10)))
+          , ('admin', crypt('admin', gen_salt('bf', 10)))
+          , ('juan', crypt('juan', gen_salt('bf', 10)))
+          , ('maria', crypt('maria', gen_salt('bf', 10)))
+          , ('jose', crypt('jose', gen_salt('bf', 10)))
+          , ('pepe', crypt('pepe', gen_salt('bf', 10)));
 
 
 
