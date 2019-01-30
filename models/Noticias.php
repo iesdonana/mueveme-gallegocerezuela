@@ -2,8 +2,6 @@
 
 namespace app\models;
 
-use Yii;
-
 /**
  * This is the model class for table "noticias".
  *
@@ -12,6 +10,7 @@ use Yii;
  * @property string $descripcion
  * @property string $url
  * @property int $usuario_id
+ * @property int $categoria_id
  * @property string $created_at
  *
  * @property Comentarios[] $comentarios
@@ -37,8 +36,8 @@ class Noticias extends \yii\db\ActiveRecord
         return [
             [['titulo', 'descripcion', 'url', 'usuario_id'], 'required'],
             [['descripcion'], 'string'],
-            [['usuario_id'], 'default', 'value' => null],
-            [['usuario_id'], 'integer'],
+            [['usuario_id', 'categoria_id'], 'default', 'value' => null],
+            [['usuario_id', 'categoria_id'], 'integer'],
             [['created_at'], 'safe'],
             [['titulo', 'url'], 'string', 'max' => 255],
             [['usuario_id'], 'exist', 'skipOnError' => true, 'targetClass' => Usuarios::className(), 'targetAttribute' => ['usuario_id' => 'id']],
@@ -52,11 +51,12 @@ class Noticias extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'titulo' => 'Titulo',
-            'descripcion' => 'Descripcion',
+            'titulo' => 'Cabecera',
+            'descripcion' => 'Descripción',
             'url' => 'Url',
-            'usuario_id' => 'Usuario ID',
-            'created_at' => 'Created At',
+            'categoria_id' => 'Categoria',
+            'usuario_id' => 'Usuario',
+            'created_at' => 'Creado el',
         ];
     }
 
@@ -90,5 +90,9 @@ class Noticias extends \yii\db\ActiveRecord
     public function getUsuario()
     {
         return $this->hasOne(Usuarios::className(), ['id' => 'usuario_id'])->inverseOf('noticias');
+    }
+    public function getCategoria()
+    {
+        return $this->hasOne(Categorias::className(), ['id' => 'categoria_id'])->inverseOf('noticias');
     }
 }
