@@ -100,11 +100,15 @@ class Usuarios extends \yii\db\ActiveRecord implements \yii\web\IdentityInterfac
         return [
             [['nombre', 'password'], 'required'],
             [['nombre'], 'string', 'max' => 32],
-            [['password'], 'string', 'max' => 60],
+            [['password', 'password_repeat'], 'string', 'max' => 60],
             [['nombre'], 'unique'],
         ];
     }
 
+    public function attributes()
+    {
+      return array_merge(parent::attributes(),['password_repeat']);
+    }
     /**
      * {@inheritdoc}
      */
