@@ -98,9 +98,9 @@ class Usuarios extends \yii\db\ActiveRecord implements \yii\web\IdentityInterfac
     public function rules()
     {
         return [
-            [['nombre', 'password'], 'required'],
+            [['nombre', 'password',  'password_repeat'], 'required'],
             [['nombre'], 'string', 'max' => 32],
-            [['password', 'password_repeat'], 'string', 'max' => 60],
+            [['password'], 'string', 'max' => 60],
             [['nombre'], 'unique'],
         ];
     }
@@ -117,7 +117,8 @@ class Usuarios extends \yii\db\ActiveRecord implements \yii\web\IdentityInterfac
         return [
             'id' => 'ID',
             'nombre' => 'Nombre',
-            'password' => 'Password',
+            'password' => 'Contraseña',
+            'password_repeat' => 'Repita Contraseña',
         ];
     }
 
