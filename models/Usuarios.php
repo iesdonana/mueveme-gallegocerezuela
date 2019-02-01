@@ -110,7 +110,7 @@ class Usuarios extends \yii\db\ActiveRecord implements \yii\web\IdentityInterfac
 
     public function attributes()
     {
-      return array_merge(parent::attributes(),['password_repeat']);
+        return array_merge(parent::attributes(), ['password_repeat']);
     }
     /**
      * {@inheritdoc}
