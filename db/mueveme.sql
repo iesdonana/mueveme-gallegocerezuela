@@ -85,7 +85,10 @@ INSERT INTO categorias (categoria)
           , ('Ciencia')
           , ('Deportes')
           , ('Medio Ambiente')
-          , ('Sanidad');
+          , ('Sanidad')
+          , ('Actualidad')
+          , ('Cultura')
+          , ('Tecnologia');
 
 INSERT INTO noticias (titulo, descripcion, url, usuario_id, categoria_id)
      VALUES ('Nueva técnica de soldadura permitirá usar aleación de aluminio en la fabricación de coches [EN]', 'Una aleación de aluminio desarrollada en la década de 1940, aluminio 7075 o Zicral, ha sido durante mucho tiempo una promesa para su uso en la fabricación de automóviles, a excepción de un obstáculo clave. Aunque es casi tan fuerte como el acero y solo un tercio del peso, es casi imposible de soldar juntos usando la técnica comúnmente utilizada para ensamblar paneles de carrocería piezas de motores.', 'https://phys.org/news/2019-01-nanotechnology-enables-weld-previously-un-weldable.html', 1, 3)
