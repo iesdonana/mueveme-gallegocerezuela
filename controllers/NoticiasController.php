@@ -7,8 +7,6 @@ use app\models\NoticiasSearch;
 use Yii;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
-use yii\web\ForbiddenHttpException;
-use yii\web\NotFoundHttpException;
 
 /**
  * NoticiasController implements the CRUD actions for Noticias model.
@@ -101,7 +99,7 @@ class NoticiasController extends Controller
     {
         $model = $this->findModel($id);
 
-        $this->verificarPropietario($model->usuario->id);
+        $model->verificarPropietario();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -121,7 +119,7 @@ class NoticiasController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $this->findModel($id)->verificarPropietario()->delete();
 
         return $this->redirect(['index']);
     }
@@ -135,20 +133,10 @@ class NoticiasController extends Controller
      */
     protected function findModel($id)
     {
-        $model = Noticias::findOne($id);
-        $this->verificarPropietario($model->usuario->id);
-
-        if ($model !== null) {
+        if (($model = Noticias::findOne($id)) !== null) {
             return $model;
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
-    }
-
-    protected function verificarPropietario($noticiaId)
-    {
-        if ($noticiaId != Yii::$app->user->id) {
-            throw new ForbiddenHttpException('Acción prohibida', 1);
-        }
     }
 }

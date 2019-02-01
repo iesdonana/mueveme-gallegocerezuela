@@ -2,6 +2,9 @@
 
 namespace app\models;
 
+use Yii;
+use yii\web\ForbiddenHttpException;
+
 /**
  * This is the model class for table "noticias".
  *
@@ -100,5 +103,14 @@ class Noticias extends \yii\db\ActiveRecord
     public function getCategoria()
     {
         return $this->hasOne(Categorias::className(), ['id' => 'categoria_id'])->inverseOf('noticias');
+    }
+
+    public function verificarPropietario()
+    {
+        if ($this->usuario->id != Yii::$app->user->id) {
+            throw new ForbiddenHttpException('Acción prohibida', 1);
+        }
+
+        return $this;
     }
 }
