@@ -20,8 +20,9 @@ use Yii;
  */
 class Usuarios extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
 {
-
-
+    const SCENARIO_CREATE = 'create';
+    const SCENARIO_UPDATE = 'update';
+    public $password_repeat;
   /**
    * {@inheritdoc}
    */
