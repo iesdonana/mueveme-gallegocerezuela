@@ -7,6 +7,7 @@ use app\models\NoticiasSearch;
 use Yii;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
+use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 
 /**
@@ -100,6 +101,8 @@ class NoticiasController extends Controller
     {
         $model = $this->findModel($id);
 
+        $this->verificarPropietario($model->usuario->id);
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }
@@ -132,10 +135,20 @@ class NoticiasController extends Controller
      */
     protected function findModel($id)
     {
-        if (($model = Noticias::findOne($id)) !== null) {
+        $model = Noticias::findOne($id);
+        $this->verificarPropietario($model->usuario->id);
+
+        if ($model !== null) {
             return $model;
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    protected function verificarPropietario($noticiaId)
+    {
+        if ($noticiaId != Yii::$app->user->id) {
+            throw new ForbiddenHttpException('Acción prohibida', 1);
+        }
     }
 }
