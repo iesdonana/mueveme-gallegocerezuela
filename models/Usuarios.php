@@ -99,10 +99,12 @@ class Usuarios extends \yii\db\ActiveRecord implements \yii\web\IdentityInterfac
     public function rules()
     {
         return [
-            [['nombre', 'password',  'password_repeat'], 'required'],
+            [['nombre'], 'required'],
             [['nombre'], 'string', 'max' => 32],
-            [['password'], 'string', 'max' => 60],
             [['nombre'], 'unique'],
+            [['password'], 'string', 'max' => 60],
+            [['password', 'password_repeat'], 'required', 'on' => [self::SCENARIO_CREATE]],
+            [['password'], 'compare', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
         ];
     }
 
