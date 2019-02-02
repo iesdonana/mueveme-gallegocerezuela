@@ -13,8 +13,7 @@ use yii\widgets\ActiveForm;
     <?php $form = ActiveForm::begin([
         'enableAjaxValidation' => true,
     ]); ?>
-    <?= var_dump($model->password);
-       var_dump($model->password_repeat); ?>
+
     <?= $form->field($model, 'nombre')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'password')->passwordInput(['maxlength' => true]) ?>
