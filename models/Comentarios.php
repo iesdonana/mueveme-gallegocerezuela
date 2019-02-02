@@ -2,8 +2,6 @@
 
 namespace app\models;
 
-use Yii;
-
 /**
  * This is the model class for table "comentarios".
  *
@@ -42,7 +40,7 @@ class Comentarios extends \yii\db\ActiveRecord
             [['usuario_id', 'noticia_id', 'comentario_id'], 'default', 'value' => null],
             [['usuario_id', 'noticia_id', 'comentario_id'], 'integer'],
             [['created_at'], 'safe'],
-            [['comentario_id'], 'exist', 'skipOnError' => true, 'targetClass' => Comentarios::className(), 'targetAttribute' => ['comentario_id' => 'id']],
+            [['comentario_id'], 'exist', 'skipOnError' => true, 'targetClass' => self::className(), 'targetAttribute' => ['comentario_id' => 'id']],
             [['noticia_id'], 'exist', 'skipOnError' => true, 'targetClass' => Noticias::className(), 'targetAttribute' => ['noticia_id' => 'id']],
             [['usuario_id'], 'exist', 'skipOnError' => true, 'targetClass' => Usuarios::className(), 'targetAttribute' => ['usuario_id' => 'id']],
         ];
@@ -63,12 +61,22 @@ class Comentarios extends \yii\db\ActiveRecord
         ];
     }
 
+    public function votosPositivos()
+    {
+        return Votos::find()->where(['comentario_id' => $this->id, 'votacion' => true])->count();
+    }
+
+    public function votosNegativos()
+    {
+        return Votos::find()->where(['comentario_id' => $this->id, 'votacion' => false])->count();
+    }
+
     /**
      * @return \yii\db\ActiveQuery
      */
     public function getComentario()
     {
-        return $this->hasOne(Comentarios::className(), ['id' => 'comentario_id'])->inverseOf('comentarios');
+        return $this->hasOne(self::className(), ['id' => 'comentario_id'])->inverseOf('comentarios');
     }
 
     /**
@@ -76,7 +84,7 @@ class Comentarios extends \yii\db\ActiveRecord
      */
     public function getComentarios()
     {
-        return $this->hasMany(Comentarios::className(), ['comentario_id' => 'id'])->inverseOf('comentario');
+        return $this->hasMany(self::className(), ['comentario_id' => 'id'])->inverseOf('comentario');
     }
 
     /**
