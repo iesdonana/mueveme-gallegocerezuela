@@ -23,68 +23,67 @@ class Usuarios extends \yii\db\ActiveRecord implements \yii\web\IdentityInterfac
     const SCENARIO_CREATE = 'create';
     const SCENARIO_UPDATE = 'update';
     public $password_repeat;
-  /**
-   * {@inheritdoc}
-   */
-  public static function findIdentity($id)
-  {
-      return static::findOne($id);
-  }
+    /**
+     * {@inheritdoc}
+     */
+    public static function findIdentity($id)
+    {
+        return static::findOne($id);
+    }
 
-  /**
-   * {@inheritdoc}
-   */
-  public static function findIdentityByAccessToken($token, $type = null)
-  {
+    /**
+     * {@inheritdoc}
+     */
+    public static function findIdentityByAccessToken($token, $type = null)
+    {
+    }
 
-  }
+    /**
+     * Finds user by nombre.
+     *
+     * @param string $nombre
+     * @return static|null
+     */
+    public static function findByUsername($nombre)
+    {
+        return static::findOne(['nombre' => $nombre]);
+    }
 
-  /**
-   * Finds user by nombre
-   *
-   * @param string $nombre
-   * @return static|null
-   */
-  public static function findByUsername($nombre)
-  {
-      return static::findOne(['nombre' => $nombre]);
-  }
+    /**
+     * {@inheritdoc}
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
-  /**
-   * {@inheritdoc}
-   */
-  public function getId()
-  {
-      return $this->id;
-  }
+    /**
+     * {@inheritdoc}
+     */
+    public function getAuthKey()
+    {
+    }
 
-  /**
-   * {@inheritdoc}
-   */
-  public function getAuthKey()
-  {
-  }
+    /**
+     * {@inheritdoc}
+     */
+    public function validateAuthKey($authKey)
+    {
+    }
 
-  /**
-   * {@inheritdoc}
-   */
-  public function validateAuthKey($authKey)
-  {
-  }
-
-  /**
-   * Validates password
-   *
-   * @param string $password password to validate
-   * @return bool if password provided is valid for current user
-   */
-  public function validatePassword($password)
-  {
-    // if (is_null($this->password)) {
-    //   return false;
-    // }
-      return Yii::$app->getSecurity()->validatePassword($password, $this->password);
-  }
+    /**
+     * Validates password.
+     *
+     * @param string $password password to validate
+     * @return bool if password provided is valid for current user
+     */
+    public function validatePassword($password)
+    {
+        // if (is_null($this->password)) {
+        //   return false;
+        // }
+        return Yii::$app->getSecurity()->validatePassword($password, $this->password);
+    }
     /**
      * {@inheritdoc}
      */
