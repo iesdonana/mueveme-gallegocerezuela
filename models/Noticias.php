@@ -60,6 +60,12 @@ class Noticias extends \yii\db\ActiveRecord
         ];
     }
 
+
+    public function numeroComentarios()
+    {
+        return Comentarios::find()->where(['noticia_id' => $this->id])->count();
+    }
+
     /**
      * @return \yii\db\ActiveQuery
      */
