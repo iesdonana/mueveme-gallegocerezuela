@@ -31,18 +31,6 @@ class Usuarios extends \yii\db\ActiveRecord implements \yii\web\IdentityInterfac
         return static::findOne($id);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function attributeLabels()
-    {
-        return [
-            'id' => 'ID',
-            'nombre' => 'Nombre',
-            'password' => 'Contraseña',
-            'password_repeat' => 'Repita Contraseña',
-        ];
-    }
 
     /**
      * {@inheritdoc}
@@ -61,6 +49,19 @@ class Usuarios extends \yii\db\ActiveRecord implements \yii\web\IdentityInterfac
     public function attributes()
     {
         return array_merge(parent::attributes(), ['password_repeat']);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function attributeLabels()
+    {
+        return [
+            'id' => 'ID',
+            'nombre' => 'Nombre',
+            'password' => 'Contraseña',
+            'password_repeat' => 'Repita Contraseña',
+        ];
     }
 
     /**

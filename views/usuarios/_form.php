@@ -10,7 +10,9 @@ use yii\widgets\ActiveForm;
 
 <div class="usuarios-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin([
+        'enableAjaxValidation' => true,
+    ]); ?>
 
     <?= $form->field($model, 'nombre')->textInput(['maxlength' => true]) ?>
 
