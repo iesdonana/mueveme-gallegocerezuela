@@ -7,6 +7,7 @@ use app\models\NoticiasSearch;
 use Yii;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
+use yii\web\NotFoundHttpException;
 
 /**
  * NoticiasController implements the CRUD actions for Noticias model.
@@ -25,16 +26,30 @@ class NoticiasController extends Controller
                     'delete' => ['POST'],
                 ],
             ],
-            'access' => [
+            'accessUpdateDelete' => [
             'class' => \yii\filters\AccessControl::className(),
-            'only' => ['create', 'update', 'delete'],
+            'only' => ['update', 'delete'],
             'rules' => [
-                // allow authenticated users
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) {
+                            $noticia_id = Yii::$app->request->get('id');
+                            return (Noticias::findOne($noticia_id))->usuario->id
+                            ==
+                            Yii::$app->user->identity->id;
+                        },
+                    ],
+                ],
+            ],
+            'accessCreate' => [
+            'class' => \yii\filters\AccessControl::className(),
+            'only' => ['create'],
+            'rules' => [
                     [
                         'allow' => true,
                         'roles' => ['@'],
                     ],
-                // everything else is denied
                 ],
             ],
         ];
@@ -99,8 +114,6 @@ class NoticiasController extends Controller
     {
         $model = $this->findModel($id);
 
-        $model->verificarPropietario();
-
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }
@@ -119,7 +132,7 @@ class NoticiasController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->verificarPropietario()->delete();
+        $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
     }
