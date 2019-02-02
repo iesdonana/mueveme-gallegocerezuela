@@ -61,7 +61,11 @@ DROP TABLE IF EXISTS movimientos CASCADE;
 CREATE TABLE movimientos
 (
       usuario_id BIGINT REFERENCES usuarios(id)
+                        ON DELETE CASCADE
+                        ON UPDATE CASCADE
     , noticia_id BIGINT REFERENCES noticias(id)
+                        ON DELETE CASCADE 
+                        ON UPDATE CASCADE
     , PRIMARY KEY(usuario_id, noticia_id)
 );
 

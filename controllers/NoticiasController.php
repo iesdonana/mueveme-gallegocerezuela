@@ -26,16 +26,30 @@ class NoticiasController extends Controller
                     'delete' => ['POST'],
                 ],
             ],
-            'access' => [
+            'accessUpdateDelete' => [
             'class' => \yii\filters\AccessControl::className(),
-            'only' => ['create', 'update', 'delete'],
+            'only' => ['update', 'delete'],
             'rules' => [
-                // allow authenticated users
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) {
+                            $noticia_id = Yii::$app->request->get('id');
+                            return (Noticias::findOne($noticia_id))->usuario->id
+                            ==
+                            Yii::$app->user->identity->id;
+                        },
+                    ],
+                ],
+            ],
+            'accessCreate' => [
+            'class' => \yii\filters\AccessControl::className(),
+            'only' => ['create'],
+            'rules' => [
                     [
                         'allow' => true,
                         'roles' => ['@'],
                     ],
-                // everything else is denied
                 ],
             ],
         ];
