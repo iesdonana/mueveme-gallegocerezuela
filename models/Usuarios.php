@@ -20,77 +20,17 @@ use Yii;
  */
 class Usuarios extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
 {
-
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function findIdentity($id)
-  {
-      return static::findOne($id);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function findIdentityByAccessToken($token, $type = null)
-  {
-
-  }
-
-  /**
-   * Finds user by nombre
-   *
-   * @param string $nombre
-   * @return static|null
-   */
-  public static function findByUsername($nombre)
-  {
-      return static::findOne(['nombre' => $nombre]);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getId()
-  {
-      return $this->id;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getAuthKey()
-  {
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function validateAuthKey($authKey)
-  {
-  }
-
-  /**
-   * Validates password
-   *
-   * @param string $password password to validate
-   * @return bool if password provided is valid for current user
-   */
-  public function validatePassword($password)
-  {
-    // if (is_null($this->password)) {
-    //   return false;
-    // }
-      return Yii::$app->getSecurity()->validatePassword($password, $this->password);
-  }
+    const SCENARIO_CREATE = 'create';
+    const SCENARIO_UPDATE = 'update';
+    public $password_repeat;
     /**
      * {@inheritdoc}
      */
-    public static function tableName()
+    public static function findIdentity($id)
     {
-        return 'usuarios';
+        return static::findOne($id);
     }
+
 
     /**
      * {@inheritdoc}
@@ -98,11 +38,17 @@ class Usuarios extends \yii\db\ActiveRecord implements \yii\web\IdentityInterfac
     public function rules()
     {
         return [
-            [['nombre', 'password'], 'required'],
+            [['nombre'], 'required'],
             [['nombre'], 'string', 'max' => 32],
-            [['password'], 'string', 'max' => 60],
             [['nombre'], 'unique'],
+            [['password', 'password_repeat'], 'required', 'on' => [self::SCENARIO_CREATE]],
+            [['password'], 'compare', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
         ];
+    }
+
+    public function attributes()
+    {
+        return array_merge(parent::attributes(), ['password_repeat']);
     }
 
     /**
@@ -113,9 +59,70 @@ class Usuarios extends \yii\db\ActiveRecord implements \yii\web\IdentityInterfac
         return [
             'id' => 'ID',
             'nombre' => 'Nombre',
-            'password' => 'Password',
+            'password' => 'Contraseña',
+            'password_repeat' => 'Repita Contraseña',
         ];
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function findIdentityByAccessToken($token, $type = null)
+    {
+    }
+
+    /**
+     * Finds user by nombre.
+     *
+     * @param string $nombre
+     * @return static|null
+     */
+    public static function findByUsername($nombre)
+    {
+        return static::findOne(['nombre' => $nombre]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAuthKey()
+    {
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function validateAuthKey($authKey)
+    {
+    }
+
+    /**
+     * Validates password.
+     *
+     * @param string $password password to validate
+     * @return bool if password provided is valid for current user
+     */
+    public function validatePassword($password)
+    {
+        return Yii::$app->getSecurity()->validatePassword($password, $this->password);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function tableName()
+    {
+        return 'usuarios';
+    }
+
 
     /**
      * @return \yii\db\ActiveQuery
@@ -163,5 +170,26 @@ class Usuarios extends \yii\db\ActiveRecord implements \yii\web\IdentityInterfac
     public function getComentarios0()
     {
         return $this->hasMany(Comentarios::className(), ['id' => 'comentario_id'])->viaTable('votos', ['usuario_id' => 'id']);
+    }
+
+    public function beforeSave($insert)
+    {
+        if (!parent::beforeSave($insert)) {
+            return false;
+        }
+
+        if ($insert) {
+            if ($this->scenario === self::SCENARIO_CREATE) {
+                $this->password = Yii::$app->security->generatePasswordHash($this->password);
+            }
+        } elseif ($this->scenario === self::SCENARIO_UPDATE) {
+            if ($this->password === '') {
+                $this->password = $this->getOldAttribute('password');
+            } else {
+                $this->password = Yii::$app->security->generatePasswordHash($this->password);
+            }
+        }
+
+        return true;
     }
 }

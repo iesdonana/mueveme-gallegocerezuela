@@ -44,6 +44,15 @@ AppAsset::register($this);
             ['label' => 'About', 'url' => ['/site/about']],
             ['label' => 'Contact', 'url' => ['/site/contact']],
             Yii::$app->user->isGuest ? (
+                '<li>'
+                . Html::hiddenInput(
+                    'Logout ()', '',
+                    ['class' => 'btn btn-link logout'] )
+                . '</li>'
+                ) : (
+                ['label' => 'Usuario', 'url' => ['/usuarios/update', 'id' =>Yii::$app->user->getId()]]
+            ),
+            Yii::$app->user->isGuest ? (
                 ['label' => 'Login', 'url' => ['/site/login']]
             ) : (
                 '<li>'
