@@ -88,8 +88,9 @@ class UsuariosController extends Controller
         $model->scenario = Usuarios::SCENARIO_UPDATE;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['index']);
         }
+
 
         $model->password = $model->password_repeat = '';
         return $this->render('update', [

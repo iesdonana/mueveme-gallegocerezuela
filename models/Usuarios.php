@@ -34,6 +34,38 @@ class Usuarios extends \yii\db\ActiveRecord implements \yii\web\IdentityInterfac
     /**
      * {@inheritdoc}
      */
+    public function attributeLabels()
+    {
+        return [
+            'id' => 'ID',
+            'nombre' => 'Nombre',
+            'password' => 'Contraseña',
+            'password_repeat' => 'Repita Contraseña',
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function rules()
+    {
+        return [
+            [['nombre'], 'required'],
+            [['nombre'], 'string', 'max' => 32],
+            [['nombre'], 'unique'],
+            [['password', 'password_repeat'], 'required', 'on' => [self::SCENARIO_CREATE]],
+            [['password'], 'compare', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
+        ];
+    }
+
+    public function attributes()
+    {
+        return array_merge(parent::attributes(), ['password_repeat']);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public static function findIdentityByAccessToken($token, $type = null)
     {
     }
@@ -79,11 +111,9 @@ class Usuarios extends \yii\db\ActiveRecord implements \yii\web\IdentityInterfac
      */
     public function validatePassword($password)
     {
-        // if (is_null($this->password)) {
-        //   return false;
-        // }
         return Yii::$app->getSecurity()->validatePassword($password, $this->password);
     }
+
     /**
      * {@inheritdoc}
      */
@@ -92,37 +122,6 @@ class Usuarios extends \yii\db\ActiveRecord implements \yii\web\IdentityInterfac
         return 'usuarios';
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function rules()
-    {
-        return [
-            [['nombre'], 'required'],
-            [['nombre'], 'string', 'max' => 32],
-            [['nombre'], 'unique'],
-            [['password'], 'string', 'max' => 60],
-            [['password', 'password_repeat'], 'required', 'on' => [self::SCENARIO_CREATE]],
-            [['password'], 'compare', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
-        ];
-    }
-
-    public function attributes()
-    {
-        return array_merge(parent::attributes(), ['password_repeat']);
-    }
-    /**
-     * {@inheritdoc}
-     */
-    public function attributeLabels()
-    {
-        return [
-            'id' => 'ID',
-            'nombre' => 'Nombre',
-            'password' => 'Contraseña',
-            'password_repeat' => 'Repita Contraseña',
-        ];
-    }
 
     /**
      * @return \yii\db\ActiveQuery
@@ -180,14 +179,12 @@ class Usuarios extends \yii\db\ActiveRecord implements \yii\web\IdentityInterfac
 
         if ($insert) {
             if ($this->scenario === self::SCENARIO_CREATE) {
-                goto salto;
+                $this->password = Yii::$app->security->generatePasswordHash($this->password);
             }
-
-            if ($this->scenario === self::SCENARIO_UPDATE) {
-                if ($this->password === '') {
-                    $this->password = $this->getOldAttribute('password');
-                }
-                salto:
+        } elseif ($this->scenario === self::SCENARIO_UPDATE) {
+            if ($this->password === '') {
+                $this->password = $this->getOldAttribute('password');
+            } else {
                 $this->password = Yii::$app->security->generatePasswordHash($this->password);
             }
         }
