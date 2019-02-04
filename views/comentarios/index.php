@@ -3,6 +3,8 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 
+use yii\widgets\ListView;
+
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\ComentariosSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -21,18 +23,10 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
-            'id',
-            'texto:ntext',
-            'usuario_id',
-            'noticia_id',
-            'comentario_id',
-            //'created_at',
-
-            ['class' => 'yii\grid\ActionColumn'],
-        ],
     ]); ?>
+
+    <?= ListView::widget([
+        'dataProvider' => $dataProvider,
+        'itemView' => '_comentario',
+        ])?>
 </div>

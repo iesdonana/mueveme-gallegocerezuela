@@ -21,6 +21,9 @@ namespace app\models;
  */
 class Comentarios extends \yii\db\ActiveRecord
 {
+    public $_positivos;
+    public $_negativos;
+
     /**
      * {@inheritdoc}
      */
@@ -38,12 +41,17 @@ class Comentarios extends \yii\db\ActiveRecord
             [['texto', 'usuario_id', 'noticia_id'], 'required'],
             [['texto'], 'string'],
             [['usuario_id', 'noticia_id', 'comentario_id'], 'default', 'value' => null],
-            [['usuario_id', 'noticia_id', 'comentario_id'], 'integer'],
+            [['usuario_id', 'noticia_id', 'comentario_id', 'positivos', 'negativos'], 'integer'],
             [['created_at'], 'safe'],
             [['comentario_id'], 'exist', 'skipOnError' => true, 'targetClass' => self::className(), 'targetAttribute' => ['comentario_id' => 'id']],
             [['noticia_id'], 'exist', 'skipOnError' => true, 'targetClass' => Noticias::className(), 'targetAttribute' => ['noticia_id' => 'id']],
             [['usuario_id'], 'exist', 'skipOnError' => true, 'targetClass' => Usuarios::className(), 'targetAttribute' => ['usuario_id' => 'id']],
         ];
+    }
+
+    public function attributes()
+    {
+        return array_merge(parent::attributes(), ['positivos', 'negativos']);
     }
 
     /**
@@ -57,18 +65,44 @@ class Comentarios extends \yii\db\ActiveRecord
             'usuario_id' => 'Usuario ID',
             'noticia_id' => 'Noticia ID',
             'comentario_id' => 'Comentario ID',
+            'positivos' => 'Votos positivos',
+            'negativos' => 'Votos negativos',
             'created_at' => 'Created At',
         ];
     }
 
-    public function votosPositivos()
-    {
-        return Votos::find()->where(['comentario_id' => $this->id, 'votacion' => true])->count();
-    }
 
-    public function votosNegativos()
+    public function getPositivos()
     {
-        return Votos::find()->where(['comentario_id' => $this->id, 'votacion' => false])->count();
+        return $this->_positivos;
+    }
+    public function getNegativos()
+    {
+        return $this->_negativos;
+    }
+    public static function findConVotos()
+    {
+        // $dataProvider = new \yii\data\SqlDataProvider([
+        //     'sql' => 'select c.*, (select count(v.comentario_id) from votos v  where v.votacion = true and v.comentario_id = c.id) as votos_positivos,(select count(comentario_id) from votos v where v.votacion = false and v.comentario_id = c.id) as votos_negativos from comentarios c left join votos v  on c.comentario_id = v.comentario_id group by c.id',
+        // ]);
+
+        $select = <<<'EOF'
+        c.*, (SELECT COUNT(v.comentario_id)
+                FROM votos v
+               WHERE v.votacion = true
+                 AND v.comentario_id = c.id)
+                  AS positivos,(SELECT COUNT(comentario_id)
+                                  FROM votos v
+                                 WHERE v.votacion = false
+                                   AND v.comentario_id = c.id)
+                                   AS negativos
+EOF;
+
+        return self::find()
+            ->select($select)
+            ->from('comentarios c')
+            ->leftJoin('votos v', 'c.comentario_id = v.comentario_id')
+            ->groupBy('c.id');
     }
 
     /**

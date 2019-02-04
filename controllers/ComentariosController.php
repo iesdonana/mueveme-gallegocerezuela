@@ -2,12 +2,13 @@
 
 namespace app\controllers;
 
-use Yii;
 use app\models\Comentarios;
 use app\models\ComentariosSearch;
+use Yii;
+use yii\data\ActiveDataProvider;
+use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 
 /**
  * ComentariosController implements the CRUD actions for Comentarios model.
@@ -38,6 +39,10 @@ class ComentariosController extends Controller
         $searchModel = new ComentariosSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
+        $dataProvider = new ActiveDataProvider([
+            'query' => Comentarios::findConVotos(),
+        ]);
+
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -46,7 +51,7 @@ class ComentariosController extends Controller
 
     /**
      * Displays a single Comentarios model.
-     * @param integer $id
+     * @param int $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -78,7 +83,7 @@ class ComentariosController extends Controller
     /**
      * Updates an existing Comentarios model.
      * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
+     * @param int $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -98,7 +103,7 @@ class ComentariosController extends Controller
     /**
      * Deletes an existing Comentarios model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
+     * @param int $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -112,7 +117,7 @@ class ComentariosController extends Controller
     /**
      * Finds the Comentarios model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
+     * @param int $id
      * @return Comentarios the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
