@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\Comentarios;
 use Yii;
+use yii\base\InvalidValueException;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -23,6 +24,18 @@ class ComentariosController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],
+                    'responder-comentario' => ['POST'],
+                ],
+            ],
+            'access' => [
+                'class' => \yii\filters\AccessControl::className(),
+                'only' => ['responder-comentario'],
+                'rules' => [
+                    // allow authenticated users
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
                 ],
             ],
         ];
@@ -41,6 +54,23 @@ class ComentariosController extends Controller
         return $this->render('_comentarios_todos', [
             'comentarios' => $comentarios,
         ]);
+    }
+
+    public function actionResponderComentario()
+    {
+        $comentarioPadreId = Yii::$app->request->post()['Comentarios']['comentario_id'];
+
+
+        if (!($model = Comentarios::findOne($comentarioPadreId)) || $model->comentario_id !== null) {
+            throw new InvalidValueException('Comentario no valido');
+        }
+
+        $model = new Comentarios();
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        }
+
+        return $this->redirect(['noticias/view', 'id' => $model->noticia_id]);
     }
 
     /**

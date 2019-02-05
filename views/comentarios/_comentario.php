@@ -53,7 +53,7 @@ use yii\helpers\Html;
                 <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span> <?= $model->negativos  ?>
             </button>
             <?php if (!$model->comentario_id): ?>
-                <?= Html::a('Contestar', ['#']) ?>
+                <?= Html::a('Responder', ['#']) ?>
             <?php endif; ?>
         </div>
     <?php endif; ?>
