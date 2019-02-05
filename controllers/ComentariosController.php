@@ -3,17 +3,15 @@
 namespace app\controllers;
 
 use app\models\Comentarios;
-use app\models\Noticias;
-use app\models\NoticiasSearch;
 use Yii;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
 /**
- * NoticiasController implements the CRUD actions for Noticias model.
+ * ComentariosController implements the CRUD actions for Comentarios model.
  */
-class NoticiasController extends Controller
+class ComentariosController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -27,81 +25,45 @@ class NoticiasController extends Controller
                     'delete' => ['POST'],
                 ],
             ],
-            'accessUpdateDelete' => [
-            'class' => \yii\filters\AccessControl::className(),
-            'only' => ['update', 'delete'],
-            'rules' => [
-                    [
-                        'allow' => true,
-                        'roles' => ['@'],
-                        'matchCallback' => function ($rule, $action) {
-                            $noticia_id = Yii::$app->request->get('id');
-                            return (Noticias::findOne($noticia_id))->usuario->id
-                            ==
-                            Yii::$app->user->identity->id;
-                        },
-                    ],
-                ],
-            ],
-            'accessCreate' => [
-            'class' => \yii\filters\AccessControl::className(),
-            'only' => ['create'],
-            'rules' => [
-                    [
-                        'allow' => true,
-                        'roles' => ['@'],
-                    ],
-                ],
-            ],
         ];
     }
 
     /**
-     * Lists all Noticias models.
+     * Lists all Comentarios models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new NoticiasSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $comentarios = Comentarios::findConVotos()
+            ->where(['c.comentario_id' => null])
+            ->all();
 
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
+        return $this->render('_comentarios_todos', [
+            'comentarios' => $comentarios,
         ]);
     }
 
     /**
-     * Displays a single Noticias model.
+     * Displays a single Comentarios model.
      * @param int $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionView($id)
     {
-        $comentarios = Comentarios::findConVotos()
-            ->where([
-                'c.comentario_id' => null,
-                'noticia_id' => $id,
-            ])
-            ->all();
-
         return $this->render('view', [
             'model' => $this->findModel($id),
-            'comentarios' => $comentarios,
         ]);
     }
 
     /**
-     * Creates a new Noticias model.
+     * Creates a new Comentarios model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Noticias();
-
-        $model->usuario_id = Yii::$app->user->id;
+        $model = new Comentarios();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -113,7 +75,7 @@ class NoticiasController extends Controller
     }
 
     /**
-     * Updates an existing Noticias model.
+     * Updates an existing Comentarios model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param int $id
      * @return mixed
@@ -133,7 +95,7 @@ class NoticiasController extends Controller
     }
 
     /**
-     * Deletes an existing Noticias model.
+     * Deletes an existing Comentarios model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param int $id
      * @return mixed
@@ -147,15 +109,15 @@ class NoticiasController extends Controller
     }
 
     /**
-     * Finds the Noticias model based on its primary key value.
+     * Finds the Comentarios model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param int $id
-     * @return Noticias the loaded model
+     * @return Comentarios the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Noticias::findOne($id)) !== null) {
+        if (($model = Comentarios::findOne($id)) !== null) {
             return $model;
         }
 
