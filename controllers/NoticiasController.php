@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\Comentarios;
 use app\models\Noticias;
 use app\models\NoticiasSearch;
 use Yii;
@@ -78,8 +79,16 @@ class NoticiasController extends Controller
      */
     public function actionView($id)
     {
+        $comentarios = Comentarios::findConVotos()
+            ->where([
+                'c.comentario_id' => null,
+                'noticia_id' => $id,
+            ])
+            ->all();
+
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'comentarios' => $comentarios,
         ]);
     }
 

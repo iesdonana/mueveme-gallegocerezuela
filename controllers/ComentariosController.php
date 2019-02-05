@@ -3,9 +3,7 @@
 namespace app\controllers;
 
 use app\models\Comentarios;
-use app\models\ComentariosSearch;
 use Yii;
-use yii\data\ActiveDataProvider;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -36,16 +34,12 @@ class ComentariosController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new ComentariosSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $comentarios = Comentarios::findConVotos()
+            ->where(['c.comentario_id' => null])
+            ->all();
 
-        $dataProvider = new ActiveDataProvider([
-            'query' => Comentarios::findConVotos(),
-        ]);
-
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
+        return $this->render('_comentarios_todos', [
+            'comentarios' => $comentarios,
         ]);
     }
 

@@ -13,8 +13,15 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="noticias-view">
 
-    <?= $this->render('_detalle', [
-        'model' => $model,
-    ]) ?>
+    <div class="">
+        <?= $this->render('_detalle', [
+            'model' => $model,
+            ]) ?>
+    </div>
+    <div style="padding-top:50px">
+        <?= $this->render('/comentarios/_comentarios_todos',[
+            'comentarios' => $comentarios,
+            ])  ?>
+    </div>
 
 </div>

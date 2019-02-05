@@ -101,7 +101,7 @@ EOF;
         return self::find()
             ->select($select)
             ->from('comentarios c')
-            ->leftJoin('votos v', 'c.comentario_id = v.comentario_id')
+            ->leftJoin('votos v', 'c.id = v.comentario_id')
             ->groupBy('c.id');
     }
 
