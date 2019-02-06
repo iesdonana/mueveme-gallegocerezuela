@@ -44,7 +44,6 @@ use yii\helpers\Html;
             <?= $model->texto  ?>
         </div>
     </div>
-    <?php if (!Yii::$app->user->isGuest): ?>
         <div class="votos">
             <button class='btn btn-xs btn-success' type="button" name="button">
                 <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> <?= $model->positivos  ?>
@@ -52,9 +51,5 @@ use yii\helpers\Html;
             <button class='btn btn-xs btn-danger' type="button" name="button">
                 <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span> <?= $model->negativos  ?>
             </button>
-            <?php if (!$model->comentario_id): ?>
-                <?= Html::a('Responder', ['#']) ?>
-            <?php endif; ?>
         </div>
-    <?php endif; ?>
 </div>
