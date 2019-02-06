@@ -102,6 +102,7 @@ INSERT INTO noticias (titulo, descripcion, url, usuario_id, categoria_id)
 
 INSERT INTO comentarios (texto, usuario_id, noticia_id, comentario_id)
      VALUES ('Mola lo de la soldadura', 2, 1, null)
+          , ('Mola lo de la soldadura', 3, 1, null)
           , ('Pues si que mola', 3, 1, 1)
           , ('Pues a mi no me gusra', 3, 3, 1)
           , ('Lo de la hipertensión es una mierda', 1, 3, null);
