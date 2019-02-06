@@ -105,6 +105,14 @@ EOF;
             ->groupBy('c.id');
     }
 
+    public function comentariosHijos()
+    {
+        return $this
+            ->findConVotos()
+            ->where(['c.comentario_id' => $this->id])
+            ->all();
+    }
+
     /**
      * @return \yii\db\ActiveQuery
      */

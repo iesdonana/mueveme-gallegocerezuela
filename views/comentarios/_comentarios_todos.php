@@ -15,7 +15,7 @@ use yii\widgets\ActiveForm;
             ]) ?>
         </div>
 
-        <?php foreach ($comentario->comentarios as $comentarioHijo): ?>
+        <?php foreach ($comentario->comentariosHijos() as $comentarioHijo): ?>
             <div class="row">
 
             <div class="col-md-offset-1">
