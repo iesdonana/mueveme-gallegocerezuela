@@ -93,7 +93,9 @@ class UsuariosController extends Controller
             return ActiveForm::validate($model);
         }
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post()) &&
+        $model->token = Yii::$app->security->generateRandomString() &&
+        $model->save()) {
             return $this->redirect(['email', 'email' => $model->email]);
         }
 
