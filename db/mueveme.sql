@@ -12,6 +12,7 @@ CREATE TABLE usuarios
                   CHECK (nombre NOT LIKE '% %')
     , password  VARCHAR(60) NOT NULL
     , email     VARCHAR(255) NOT NULL
+    , confirmado BOOLEAN NOT NULL DEFAULT false
 );
 
 DROP TABLE IF EXISTS categorias CASCADE;
@@ -74,13 +75,13 @@ CREATE TABLE movimientos
 -- Datos de prueba --
 ---------------------
 
-INSERT INTO usuarios (nombre,password,email)
-     VALUES ('joni_182', crypt('joni', gen_salt('bf', 10)), 'joni@hotmail.com')
-          , ('admin', crypt('admin', gen_salt('bf', 10)), 'admin@hotmail.com')
-          , ('juan', crypt('juan', gen_salt('bf', 10)), 'juan@hotmail.com')
-          , ('maria', crypt('maria', gen_salt('bf', 10)), 'maria@hotmail.com')
-          , ('jose', crypt('jose', gen_salt('bf', 10)), 'jose@hotmail.com')
-          , ('pepe', crypt('pepe', gen_salt('bf', 10)), 'pepe@hotmail.com');
+INSERT INTO usuarios (nombre,password,email,confirmado)
+     VALUES ('joni_182', crypt('joni', gen_salt('bf', 10)), 'joni@hotmail.com',true)
+          , ('admin', crypt('admin', gen_salt('bf', 10)), 'admin@hotmail.com',true)
+          , ('juan', crypt('juan', gen_salt('bf', 10)), 'juan@hotmail.com',true)
+          , ('maria', crypt('maria', gen_salt('bf', 10)), 'maria@hotmail.com',true)
+          , ('jose', crypt('jose', gen_salt('bf', 10)), 'jose@hotmail.com',true)
+          , ('pepe', crypt('pepe', gen_salt('bf', 10)), 'pepe@hotmail.com',true);
 
 
 

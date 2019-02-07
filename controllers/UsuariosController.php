@@ -94,7 +94,7 @@ class UsuariosController extends Controller
         }
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['email', 'email' => $model->email]);
         }
 
         return $this->render('create', [
@@ -160,7 +160,19 @@ class UsuariosController extends Controller
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
-    public function actionEmail()
+    public function actionEmail($email)
     {
+        if (Yii::$app->mailer->compose('mail')
+            ->setFrom('mueveme.gallego.cerezuela@gmail.com')
+            ->setTo($email)
+            ->setSubject('Prueba de correo')
+            // ->setTextBody('Esto es una prueba.')
+            // ->setHtmlBody('<h1>Esto es una prueba</h1>')
+            ->send()) {
+            Yii::$app->session->setFlash('success', 'Se ha enviado un correo de confirmación, por favor, consulte su correo.');
+        } else {
+            Yii::$app->session->setFlash('error', 'Ha habido un error al mandar el correo de confirmación.');
+        }
+        return $this->redirect(['site/index']);
     }
 }

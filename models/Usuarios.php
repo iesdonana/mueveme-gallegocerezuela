@@ -10,6 +10,8 @@ use Yii;
  * @property int $id
  * @property string $nombre
  * @property string $password
+ * @property string $email
+ * @property bool $confirmado
  *
  * @property Comentarios[] $comentarios
  * @property Movimientos[] $movimientos
@@ -45,6 +47,7 @@ class Usuarios extends \yii\db\ActiveRecord implements \yii\web\IdentityInterfac
             [['password_repeat'], 'safe', 'on' => [self::SCENARIO_UPDATE]],
             [['password'], 'compare', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
             [['email'], 'email', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
+            [['confirmado'], 'safe'],
         ];
     }
 
