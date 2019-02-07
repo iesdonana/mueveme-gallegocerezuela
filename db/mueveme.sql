@@ -74,7 +74,7 @@ CREATE TABLE movimientos
 -- Datos de prueba --
 ---------------------
 
-INSERT INTO usuarios (nombre,password)
+INSERT INTO usuarios (nombre,password,email)
      VALUES ('joni_182', crypt('joni', gen_salt('bf', 10)), 'joni@hotmail.com')
           , ('admin', crypt('admin', gen_salt('bf', 10)), 'admin@hotmail.com')
           , ('juan', crypt('juan', gen_salt('bf', 10)), 'juan@hotmail.com')
