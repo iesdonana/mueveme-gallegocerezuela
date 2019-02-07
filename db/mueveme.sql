@@ -75,12 +75,12 @@ CREATE TABLE movimientos
 ---------------------
 
 INSERT INTO usuarios (nombre,password)
-     VALUES ('joni_182', crypt('joni', gen_salt('bf', 10)))
-          , ('admin', crypt('admin', gen_salt('bf', 10)))
-          , ('juan', crypt('juan', gen_salt('bf', 10)))
-          , ('maria', crypt('maria', gen_salt('bf', 10)))
-          , ('jose', crypt('jose', gen_salt('bf', 10)))
-          , ('pepe', crypt('pepe', gen_salt('bf', 10)));
+     VALUES ('joni_182', crypt('joni', gen_salt('bf', 10)), 'joni@hotmail.com')
+          , ('admin', crypt('admin', gen_salt('bf', 10)), 'admin@hotmail.com')
+          , ('juan', crypt('juan', gen_salt('bf', 10)), 'juan@hotmail.com')
+          , ('maria', crypt('maria', gen_salt('bf', 10)), 'maria@hotmail.com')
+          , ('jose', crypt('jose', gen_salt('bf', 10)), 'jose@hotmail.com')
+          , ('pepe', crypt('pepe', gen_salt('bf', 10)), 'pepe@hotmail.com');
 
 
 
