@@ -6,11 +6,18 @@ DROP TABLE IF EXISTS usuarios CASCADE;
 
 CREATE TABLE usuarios
 (
-      id        BIGSERIAL    PRIMARY KEY
-    , nombre    VARCHAR(32) NOT NULL UNIQUE
-                  CONSTRAINT ck_login_sin_espacios
-                  CHECK (nombre NOT LIKE '% %')
-    , password  VARCHAR(60) NOT NULL
+      id         BIGSERIAL   PRIMARY KEY
+);
+
+CREATE TABLE usuarios_detalles
+(
+    , nombre     VARCHAR(32) NOT NULL UNIQUE
+                             CONSTRAINT ck_login_sin_espacios
+                             CHECK (nombre NOT LIKE '% %')
+    , password   VARCHAR(60) NOT NULL
+    , created_at   TIMESTAMP    DEFAULT CURRENT_TIMESTAMP
+    , confirmado BOOL        NOT NULL
+    , usuarios_id
 );
 
 DROP TABLE IF EXISTS categorias CASCADE;
@@ -30,6 +37,8 @@ CREATE TABLE noticias
     , descripcion  TEXT         NOT NULL
     , url          VARCHAR(255) NOT NULL -- ¿Le ponemos UNIQUE? ¿Le ponemos tambien un patrón? ¿Lo llamamos URL o URI? --
     , usuario_id   BIGINT       NOT NULL REFERENCES usuarios(id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
     , categoria_id BIGINT       REFERENCES categorias(id)
     , created_at   TIMESTAMP    DEFAULT CURRENT_TIMESTAMP
 );
@@ -41,6 +50,8 @@ CREATE TABLE comentarios
       id            BIGSERIAL PRIMARY KEY
     , texto         TEXT      NOT NULL
     , usuario_id    BIGINT    NOT NULL REFERENCES usuarios(id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
     , noticia_id    BIGINT    NOT NULL REFERENCES noticias(id)
     , comentario_id BIGINT    REFERENCES comentarios(id)
     , created_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -51,6 +62,8 @@ DROP TABLE IF EXISTS votos CASCADE;
 CREATE TABLE votos
 (
       usuario_id    BIGINT REFERENCES usuarios(id)
+      ON DELETE CASCADE
+      ON UPDATE CASCADE
     , comentario_id BIGINT REFERENCES comentarios(id)
     , votacion      BOOL   NOT NULL
     , PRIMARY KEY(usuario_id, comentario_id)
@@ -73,13 +86,13 @@ CREATE TABLE movimientos
 -- Datos de prueba --
 ---------------------
 
-INSERT INTO usuarios (nombre,password)
-     VALUES ('joni_182', crypt('joni', gen_salt('bf', 10)))
-          , ('admin', crypt('admin', gen_salt('bf', 10)))
-          , ('juan', crypt('juan', gen_salt('bf', 10)))
-          , ('maria', crypt('maria', gen_salt('bf', 10)))
-          , ('jose', crypt('jose', gen_salt('bf', 10)))
-          , ('pepe', crypt('pepe', gen_salt('bf', 10)));
+INSERT INTO usuarios (nombre,password,created_at,confirmado)
+     VALUES ('joni_182', crypt('joni', gen_salt('bf', 10)),null,true)
+          , ('admin', crypt('admin', gen_salt('bf', 10)),null,true)
+          , ('juan', crypt('juan', gen_salt('bf', 10)),null,false)
+          , ('maria', crypt('maria', gen_salt('bf', 10)),'2018-01-01 18:22:33',true)
+          , ('jose', crypt('jose', gen_salt('bf', 10)),'2019-01-01 18:22:33',false)
+          , ('pepe', crypt('pepe', gen_salt('bf', 10)),'2019-02-03 18:22:33',false);
 
 
 
