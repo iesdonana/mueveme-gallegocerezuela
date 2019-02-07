@@ -12,6 +12,7 @@ use Yii;
  * @property string $password
  * @property string $email
  * @property bool $confirmado
+ * @property string $token
  *
  * @property Comentarios[] $comentarios
  * @property Movimientos[] $movimientos
@@ -47,7 +48,10 @@ class Usuarios extends \yii\db\ActiveRecord implements \yii\web\IdentityInterfac
             [['password_repeat'], 'safe', 'on' => [self::SCENARIO_UPDATE]],
             [['password'], 'compare', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
             [['email'], 'email', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
-            [['confirmado'], 'safe'],
+            [['confirmado', 'token'], 'safe'],
+            [['token'], 'default', 'value' => function () {
+                return $this->token = Yii::$app->security->generateRandomString();
+            }],
         ];
     }
 
