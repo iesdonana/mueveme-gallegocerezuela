@@ -44,6 +44,7 @@ class Usuarios extends \yii\db\ActiveRecord implements \yii\web\IdentityInterfac
             [['password', 'password_repeat'], 'required', 'on' => [self::SCENARIO_CREATE]],
             [['password_repeat'], 'safe', 'on' => [self::SCENARIO_UPDATE]],
             [['password'], 'compare', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
+            [['email'], 'email', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
         ];
     }
 
@@ -188,6 +189,9 @@ class Usuarios extends \yii\db\ActiveRecord implements \yii\web\IdentityInterfac
                 $this->password = $this->getOldAttribute('password');
             } else {
                 $this->password = Yii::$app->security->generatePasswordHash($this->password);
+            }
+            if ($this->email === '') {
+                $this->email = $this->getOldAttribute('email');
             }
         }
 
