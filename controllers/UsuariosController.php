@@ -94,7 +94,8 @@ class UsuariosController extends Controller
         }
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['email']);
+            $this->email($model);
+            return;
         }
 
         return $this->render('create', [
@@ -160,7 +161,7 @@ class UsuariosController extends Controller
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
-    public function actionEmail($model)
+    public function email($model)
     {
         if (Yii::$app->mailer->compose('mail')
             ->setFrom('mueveme.gallego.cerezuela@gmail.com')
