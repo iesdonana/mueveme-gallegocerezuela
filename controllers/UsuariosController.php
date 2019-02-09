@@ -164,8 +164,7 @@ class UsuariosController extends Controller
     public function email($model)
     {
         if (Yii::$app->mailer->compose('mail', [
-            'nombre' => $model->nombre,
-            'token' => $model->token,
+            'model' => $model,
         ])
             ->setFrom('mueveme.gallego.cerezuela@gmail.com')
             ->setTo($model->email)
@@ -182,16 +181,18 @@ class UsuariosController extends Controller
 
     public function actionVerificar()
     {
-        $nombre = Yii::$app->request->post('nombre', null);
-        $token = Yii::$app->request->post('token', null);
+        extract(Yii::$app->request->post('Usuarios'));
+
         $usuario = Usuarios::findByUserName($nombre);
-        $usuario['scenario'] = 'update';
+
         if (isset($usuario)) {
-            if ($usuario['$token'] === $token) {
-                $usuario['confirmado'] = true;
+            if ($usuario->token === $token) {
+                $usuario->confirmado = true;
                 if ($usuario->validate()) {
                     Yii::$app->session->setFlash('success', 'Se ha verificado su usuario CORRECTAMENTE, puedes iniciar sesión.');
                 } else {
+                    // var_dump($usuario->errors);
+                    // die();
                     Yii::$app->session->setFlash('error', 'ERROR: No se ha verificado su usuario correctamente1.');
                 }
             } else {
