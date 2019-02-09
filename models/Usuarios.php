@@ -189,6 +189,7 @@ class Usuarios extends \yii\db\ActiveRecord implements \yii\web\IdentityInterfac
 
         if ($insert) {
             if ($this->scenario === self::SCENARIO_CREATE) {
+                $this->confirmado = false;
                 $this->password = Yii::$app->security->generatePasswordHash($this->password);
             }
         } elseif ($this->scenario === self::SCENARIO_UPDATE) {

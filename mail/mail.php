@@ -11,7 +11,8 @@ use yii\helpers\Url;
     Url::to('/usuarios/verificar', true),
     ['data-method' => 'POST',
      'data-params' => [
-        'token' => $token,
-        'id' => $id,
+        'model' => $model,
     ], ]
-)?>
+);
+var_dump($model);
+?>
