@@ -188,7 +188,7 @@ class UsuariosController extends Controller
         if (isset($usuario)) {
             if ($usuario->token === $token) {
                 $usuario->confirmado = true;
-                if ($usuario->validate()) {
+                if ($usuario->save()) {
                     Yii::$app->session->setFlash('success', 'Se ha verificado su usuario CORRECTAMENTE, puedes iniciar sesión.');
                 } else {
                     // var_dump($usuario->errors);
