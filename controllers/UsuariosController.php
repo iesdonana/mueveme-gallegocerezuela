@@ -164,7 +164,8 @@ class UsuariosController extends Controller
     public function email($model)
     {
         if (Yii::$app->mailer->compose('mail', [
-            'model' => $model,
+            'nombre' => $model->nombre,
+            'token' => $model->token,
         ])
             ->setFrom('mueveme.gallego.cerezuela@gmail.com')
             ->setTo($model->email)
@@ -181,20 +182,23 @@ class UsuariosController extends Controller
 
     public function actionVerificar()
     {
-        $model = new Usuarios();
-        $model->load(Yii::$app->request->post('model'));
-        $id = $model->id;
-        $usuario = Usuarios::findOne($id);
-        if ($usuario['token'] === $model->token) {
-            $model->confirmado = true;
-            $model->scenario = 'update';
-            if ($model->validate()) {
-                Yii::$app->session->setFlash('success', 'Se ha verificado su usuario CORRECTAMENTE, puedes iniciar sesión.');
+        $nombre = Yii::$app->request->post('nombre', null);
+        $token = Yii::$app->request->post('token', null);
+        $usuario = Usuarios::findByUserName($nombre);
+        $usuario['scenario'] = 'update';
+        if (isset($usuario)) {
+            if ($usuario['$token'] === $token) {
+                $usuario['confirmado'] = true;
+                if ($usuario->validate()) {
+                    Yii::$app->session->setFlash('success', 'Se ha verificado su usuario CORRECTAMENTE, puedes iniciar sesión.');
+                } else {
+                    Yii::$app->session->setFlash('error', 'ERROR: No se ha verificado su usuario correctamente1.');
+                }
             } else {
-                Yii::$app->session->setFlash('error', 'ERROR: No se ha verificado su usuario correctamente1.');
+                Yii::$app->session->setFlash('error', 'ERROR: No se ha verificado su usuario correctamente.');
             }
         } else {
-            Yii::$app->session->setFlash('error', 'ERROR: No se ha verificado su usuario correctamente.');
+            Yii::$app->session->setFlash('error', 'ERROR: No se ha verificado.');
         }
         return $this->redirect(['site/index']);
     }
