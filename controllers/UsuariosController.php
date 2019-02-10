@@ -160,12 +160,12 @@ class UsuariosController extends Controller
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
-    public function actionEmail($model)
+    public function email($model)
     {
         if (Yii::$app->mailer->compose('mail')
             ->setFrom('mueveme.gallego.cerezuela@gmail.com')
             ->setTo($model->email)
-            ->setSubject('Prueba de correo')
+            ->setSubject('Confirmación de email')
             // ->setTextBody('Esto es una prueba.')
             // ->setHtmlBody('<h1>Esto es una prueba</h1>')
             ->send()) {
@@ -176,26 +176,42 @@ class UsuariosController extends Controller
         return $this->redirect(['site/index']);
     }
 
+    public function email1($model)
+    {
+        if (Yii::$app->mailer->compose('recuperacontra')
+            ->setFrom('mueveme.gallego.cerezuela@gmail.com')
+            ->setTo($model->email)
+            ->setSubject('Recuperación de contraseña')
+            // ->setTextBody('Esto es una prueba.')
+            // ->setHtmlBody('<h1>Esto es una prueba</h1>')
+            ->send()) {
+            Yii::$app->session->setFlash('success', 'Se ha enviado un correo para restablecer su contraseña ,porfavor, consulte su correo.');
+        } else {
+            Yii::$app->session->setFlash('error', 'Ha habido un error al mandar el correo.');
+        }
+        return $this->redirect(['site/index']);
+    }
+
     public function actionVerificar($model)
     {
     }
 
     public function actionRecuperarcontra()
     {
-        $emailNombre = Yii::$app->request->get('emailNombre');
-        $usuarioNombre = Usuarios::findByUsername($emailNombre);
-        $usuarioEmail = Usuarios::findByEmail($emailNombre);
+        if ($emailNombre = Yii::$app->request->get('emailNombre')) {
+            $usuarioNombre = Usuarios::findByUsername($emailNombre);
+            $usuarioEmail = Usuarios::findByEmail($emailNombre);
 
-        if (isset($usuarioNombre) || isset($usuarioEmail)) {
-            if (isset($usuarioNombre)) {
-                $this->email($usuarioNombre->email);
+            if (isset($usuarioNombre) || isset($usuarioEmail)) {
+                if (isset($usuarioNombre)) {
+                    $this->email1($usuarioNombre->email);
+                } else {
+                    $this->email1($usuarioEmail->email);
+                }
             } else {
-                $this->email($usuarioEmail->email);
+                Yii::$app->session->setFlash('error', 'El usuario o email no son correctos.');
             }
-        } else {
-            Yii::$app->session->setFlash('error', 'El usuario o email no son correctos.');
         }
-
         return $this->render('recuperarcontra');
     }
 }
