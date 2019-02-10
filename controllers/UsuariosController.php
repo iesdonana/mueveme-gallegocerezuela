@@ -178,7 +178,7 @@ class UsuariosController extends Controller
 
     public function email1($model)
     {
-        if (Yii::$app->mailer->compose('recuperacontra')
+        if (Yii::$app->mailer->compose('recuperarcontra')
             ->setFrom('mueveme.gallego.cerezuela@gmail.com')
             ->setTo($model->email)
             ->setSubject('Recuperación de contraseña')
@@ -198,7 +198,7 @@ class UsuariosController extends Controller
 
     public function actionRecuperarcontra()
     {
-        if ($emailNombre = Yii::$app->request->get('emailNombre')) {
+        if ($emailNombre = Yii::$app->request->post('emailNombre')) {
             $usuarioNombre = Usuarios::findByUsername($emailNombre);
             $usuarioEmail = Usuarios::findByEmail($emailNombre);
 
