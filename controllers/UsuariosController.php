@@ -94,7 +94,13 @@ class UsuariosController extends Controller
         }
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            $this->email($model);
+            $this->email(
+                $model,
+                'mail',
+                'Confirmación de usuario',
+                'Se ha enviado un correo de confirmación, por favor, consulte su correo.',
+                'Ha habido un error al mandar el correo de confirmación.'
+            );
             return;
         }
 
@@ -161,42 +167,26 @@ class UsuariosController extends Controller
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
-    public function email($model)
+    public function email($model, $vista, $asunto, $mensajeEnvio, $mensajeError)
     {
-        if (Yii::$app->mailer->compose('mail', [
+        if (Yii::$app->mailer->compose($vista, [
             'model' => $model,
         ])
             ->setFrom('mueveme.gallego.cerezuela@gmail.com')
             ->setTo($model->email)
-            ->setSubject('Confirmación de usuario')
+            ->setSubject($asunto)
             // ->setTextBody('Esto es una prueba.')
             // ->setHtmlBody('<h1>Esto es una prueba</h1>')
             ->send()) {
-            Yii::$app->session->setFlash('success', 'Se ha enviado un correo de confirmación, por favor, consulte su correo.');
+            Yii::$app->session->setFlash('success', $mensajeEnvio);
         } else {
-            Yii::$app->session->setFlash('error', 'Ha habido un error al mandar el correo de confirmación.');
+            Yii::$app->session->setFlash('error', $mensajeError);
         }
         return $this->redirect(['site/index']);
     }
 
-    public function email1($model)
-    {
-        if (Yii::$app->mailer->compose('recuperarcontra', [
-            'model' => $model,
-        ])
-            ->setFrom('mueveme.gallego.cerezuela@gmail.com')
-            ->setTo($model->email)
-            ->setSubject('Recuperación de contraseña')
-            // ->setTextBody('Esto es una prueba.')
-            // ->setHtmlBody('<h1>Esto es una prueba</h1>')
-            ->send()) {
-            Yii::$app->session->setFlash('success', 'Se ha enviado un correo para restablecer su contraseña ,porfavor, consulte su correo.');
-        } else {
-            Yii::$app->session->setFlash('error', 'Ha habido un error al mandar el correo.');
-          
     public function actionVerificar()
     {
-
         //extract(Yii::$app->request->post('x_Usuarios'));
         //A jose se le manda por post x_Usuarios y a joni Usuarios.
         //Tenemos que extraerlo de diferente forma cada uno, no sabemos el motivo.
@@ -237,9 +227,21 @@ class UsuariosController extends Controller
 
             if (isset($usuarioNombre) || isset($usuarioEmail)) {
                 if (isset($usuarioNombre)) {
-                    $this->email1($usuarioNombre);
+                    $this->email(
+                        $usuarioNombre,
+                        'recuperarcontra',
+                        'Recuperación de contraseña',
+                        'Se ha enviado un correo para restablecer su contraseña ,porfavor, consulte su correo.',
+                        'Ha ocurrido un error al mandar el correo.'
+                        );
                 } else {
-                    $this->email1($usuarioEmail);
+                    $this->email(
+                        $usuarioEmail,
+                        'recuperarcontra',
+                        'Recuperación de contraseña',
+                        'Se ha enviado un correo para restablecer su contraseña ,porfavor, consulte su correo.',
+                        'Ha ocurrido un error al mandar el correo.'
+                        );
                 }
             } else {
                 Yii::$app->session->setFlash('error', 'El usuario o email no son correctos.');

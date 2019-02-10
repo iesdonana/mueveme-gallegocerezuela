@@ -43,11 +43,12 @@ class Usuarios extends \yii\db\ActiveRecord implements \yii\web\IdentityInterfac
         return [
             [['nombre'], 'required'],
             [['nombre'], 'string', 'max' => 32],
-            [['nombre'], 'unique'],
+            [['nombre', 'email'], 'unique'],
             [['password', 'password_repeat'], 'required', 'on' => [self::SCENARIO_CREATE]],
             [['password_repeat', 'confirmado', 'token'], 'safe', 'on' => [self::SCENARIO_UPDATE]],
             [['password'], 'compare', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
             [['email'], 'email', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
+            [['email'], 'unique', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
             [['confirmado', 'token'], 'safe'],
             [['token'], 'default', 'value' => function () {
                 return $this->token = Yii::$app->security->generateRandomString();
