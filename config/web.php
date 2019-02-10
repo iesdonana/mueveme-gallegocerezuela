@@ -14,6 +14,7 @@ $config = [
         '@npm' => '@vendor/npm-asset',
     ],
     'language' => 'es-ES',
+
     'components' => [
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
@@ -51,11 +52,11 @@ $config = [
         'formatter' => [
             'timeZone' => 'Europe/Madrid',
         ],
-
         'urlManager' => [
-            'enablePrettyUrl' => true,
+            'enablePrettyUrl' => false,
             'showScriptName' => false,
             'rules' => [
+                // 'usuarios/verificar' => 'usuarios/verificar',
                 'usuarios/modificarcontra' => 'usuarios/modificarcontra',
             ],
         ],

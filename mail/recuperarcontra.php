@@ -13,5 +13,5 @@ use yii\widgets\ActiveForm;
 
 <?= $form->field($model, 'id')->hiddenInput()->label(false)  ?>
 
-<button type="submit" name="button">Restablecer contraseña </button>
+<button type="submit" name="button">Reestablecer contraseña </button>
 <?php ActiveForm::end() ?>

@@ -236,7 +236,7 @@ class UsuariosController extends Controller
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             Yii::$app->session->setFlash('success', 'Se ha modificado su contraseña correctamente.');
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['site/index']);
         }
 
 
@@ -244,5 +244,11 @@ class UsuariosController extends Controller
         return $this->render('modificarcontra', [
             'model' => $model,
         ]);
+    }
+
+    public function beforeAction($action)
+    {
+        $this->enableCsrfValidation = false;
+        return parent::beforeAction($action);
     }
 }

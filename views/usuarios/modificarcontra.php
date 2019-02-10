@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $usuario app\models\Usuarios */
+/* @var $model app\models\Usuarios */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
@@ -12,19 +12,19 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin([
         'enableAjaxValidation' => true,
-        'action' => ['usuarios/modificarcontra'],
     ]); ?>
+    <?= $form->field($model, 'id')->textInput(['maxlength' => true])->hiddenInput()->label(false) ?>
 
-    <?= $form->field($usuario, 'nombre')->textInput(['maxlength' => true])->hiddenInput() ?>
+    <?= $form->field($model, 'nombre')->textInput(['maxlength' => true])->hiddenInput()->label(false) ?>
 
-    <?= $form->field($usuario, 'email')->textInput(['maxlength' => true])->hiddenInput() ?>
+    <?= $form->field($model, 'email')->textInput(['maxlength' => true])->hiddenInput()->label(false) ?>
 
-    <?= $form->field($usuario, 'password')->passwordInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'password')->passwordInput(['maxlength' => true]) ?>
 
-    <?= $form->field($usuario, 'password_repeat')->passwordInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'password_repeat')->passwordInput(['maxlength' => true]) ?>
 
     <div class="form-group">
-        <?= Html::submitButton($this->title, ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton('Modificar contraseña', ['class' => 'btn btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>
