@@ -181,7 +181,7 @@ class UsuariosController extends Controller
 
     public function actionVerificar()
     {
-        extract(Yii::$app->request->post('Usuarios'));
+        extract(Yii::$app->request->post('x_Usuarios'));
 
         $usuario = Usuarios::findByUserName($nombre);
 
@@ -202,5 +202,11 @@ class UsuariosController extends Controller
             Yii::$app->session->setFlash('error', 'ERROR: No se ha verificado.');
         }
         return $this->redirect(['site/index']);
+    }
+
+    public function beforeAction($action)
+    {
+        $this->enableCsrfValidation = false;
+        return parent::beforeAction($action);
     }
 }

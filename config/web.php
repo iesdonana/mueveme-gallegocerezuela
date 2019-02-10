@@ -53,10 +53,10 @@ $config = [
             'timeZone' => 'Europe/Madrid',
         ],
         'urlManager' => [
-            'enablePrettyUrl' => true,
+            'enablePrettyUrl' => false,
             'showScriptName' => false,
             'rules' => [
-                'usuarios/verificar' => 'usuarios/verificar',
+                // 'usuarios/verificar' => 'usuarios/verificar',
             ],
         ],
     ],
