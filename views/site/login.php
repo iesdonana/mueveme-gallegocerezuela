@@ -38,8 +38,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?= Html::submitButton('Login', ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
                 <?= Html::a('Registrarse', ['usuarios/create'],['class' => 'btn btn-success']) ?>
             </div>
-            <div class="row">
-                <?= Html::a('Olvidé mi contraseña', ['usuarios/recuperarcontra']) ?>
+            <div class="col-lg-offset-1 col-lg-11">
+                <div class="row">
+                    <?= Html::a('Olvidé mi contraseña', ['usuarios/recuperarcontra']) ?>
+                </div>
+                <div class="row">
+                    <?= Html::a('Olvidé mi nick', ['usuarios/recuperarnick']) ?>
+                </div>
             </div>
           </div>
         </div>

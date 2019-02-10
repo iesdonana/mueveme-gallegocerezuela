@@ -277,6 +277,26 @@ class UsuariosController extends Controller
         ]);
     }
 
+    public function actionRecuperarnick()
+    {
+        if ($email = Yii::$app->request->post('email')) {
+            $usuario = Usuarios::findByEmail($email);
+
+            if (isset($usuario)) {
+                $this->email(
+                    $usuario,
+                    'recuperarnick',
+                    'Recuperación del Nick',
+                    'Se ha enviado un correo para recordarle su nick ,porfavor, consulte su correo.',
+                    'Ha ocurrido un error al mandar el correo.'
+                    );
+            } else {
+                Yii::$app->session->setFlash('error', 'El email no es correcto.');
+            }
+        }
+        return $this->render('recuperarnick');
+    }
+
     public function beforeAction($action)
     {
         $this->enableCsrfValidation = false;
