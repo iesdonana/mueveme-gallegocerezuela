@@ -94,7 +94,8 @@ class UsuariosController extends Controller
         }
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['email']);
+            $this->email($model);
+            return;
         }
 
         return $this->render('create', [
@@ -160,12 +161,14 @@ class UsuariosController extends Controller
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
-    public function actionEmail($model)
+    public function email($model)
     {
-        if (Yii::$app->mailer->compose('mail')
+        if (Yii::$app->mailer->compose('mail', [
+            'model' => $model,
+        ])
             ->setFrom('mueveme.gallego.cerezuela@gmail.com')
             ->setTo($model->email)
-            ->setSubject('Prueba de correo')
+            ->setSubject('Confirmación de usuario')
             // ->setTextBody('Esto es una prueba.')
             // ->setHtmlBody('<h1>Esto es una prueba</h1>')
             ->send()) {
@@ -176,7 +179,36 @@ class UsuariosController extends Controller
         return $this->redirect(['site/index']);
     }
 
-    public function actionVerificar($model)
+    public function actionVerificar()
     {
+        extract(Yii::$app->request->post('x_Usuarios'));
+        //A jose se le manda por post x_Usuarios y a joni Usuarios.
+        //Tenemos que extraerlo de diferente forma cada uno, no sabemos el motivo.
+
+        $usuario = Usuarios::findByUserName($nombre);
+
+        if (isset($usuario)) {
+            if ($usuario->token === $token) {
+                $usuario->confirmado = true;
+                if ($usuario->save()) {
+                    Yii::$app->session->setFlash('success', 'Se ha verificado su usuario CORRECTAMENTE, puedes iniciar sesión.');
+                } else {
+                    // var_dump($usuario->errors);
+                    // die();
+                    Yii::$app->session->setFlash('error', 'ERROR: No se ha verificado su usuario correctamente1.');
+                }
+            } else {
+                Yii::$app->session->setFlash('error', 'ERROR: No se ha verificado su usuario correctamente.');
+            }
+        } else {
+            Yii::$app->session->setFlash('error', 'ERROR: No se ha verificado.');
+        }
+        return $this->redirect(['site/index']);
+    }
+
+    public function beforeAction($action)
+    {
+        $this->enableCsrfValidation = false;
+        return parent::beforeAction($action);
     }
 }
