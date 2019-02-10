@@ -181,9 +181,16 @@ class UsuariosController extends Controller
 
     public function actionVerificar()
     {
-        extract(Yii::$app->request->post('x_Usuarios'));
+
+        //extract(Yii::$app->request->post('x_Usuarios'));
         //A jose se le manda por post x_Usuarios y a joni Usuarios.
         //Tenemos que extraerlo de diferente forma cada uno, no sabemos el motivo.
+
+        $post = Yii::$app->request->post();
+        $keys = preg_grep('/.*Usuarios.*/i', array_keys($post));
+
+
+        extract(Yii::$app->request->post($keys[1]));
 
         $usuario = Usuarios::findByUserName($nombre);
 
