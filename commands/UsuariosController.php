@@ -13,24 +13,26 @@ use yii\console\ExitCode;
 class UsuariosController extends Controller
 {
     /**
-     * This command echoes what you have entered as the message.
-     * @param string $message the message to be echoed.
-     * @param mixed $dias
-     * @return int Exit code
+     * Borra a los usuarios no confirmados registrados hace mas de $dias dias.
+     * @param mixed $dias Numeros de dias trás los que el script borra a un
+     *                    usuario no confirmado.
+     * @return int        Exit code
      */
     public function actionLimpiar($dias = 7)
     {
-        if (!is_numeric($dias)) {
-            echo "Error: El parametro debe de ser un número\n";
+        if (!is_numeric($dias) || $dias < 0) {
+            echo "Error: El parametro debe ser un número positivo\n";
             return ExitCode::IOERR;
         }
+
         $dateTime = new \DateTime();
-        $dateTime->sub(new \DateInterval("P{$dias}D"))
+        $dateTime = $dateTime->sub(new \DateInterval("P{$dias}D"))
             ->format('Y-m-d H:m:s');
 
-        $borrados = \app\models\Usuarios::deleteAll()
-            ->where(['confirmado' => false])
-            ->andWhere(['<', 'created_at', $dateTime]);
+        $borrados = \app\models\Usuarios::deleteAll(
+            'confirmado = false AND created_at < :created_at',
+            [':created_at' => $dateTime]
+        );
 
         echo "Se han borrado $borrados usuarios\n";
 

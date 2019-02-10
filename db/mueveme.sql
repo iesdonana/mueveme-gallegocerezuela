@@ -7,18 +7,14 @@ DROP TABLE IF EXISTS usuarios CASCADE;
 CREATE TABLE usuarios
 (
       id         BIGSERIAL   PRIMARY KEY
+      , nombre     VARCHAR(32) NOT NULL UNIQUE
+                               CONSTRAINT ck_login_sin_espacios
+                               CHECK (nombre NOT LIKE '% %')
+      , password   VARCHAR(60) NOT NULL
+      , created_at   TIMESTAMP    DEFAULT CURRENT_TIMESTAMP
+      , confirmado BOOL        NOT NULL
 );
 
-CREATE TABLE usuarios_detalles
-(
-    , nombre     VARCHAR(32) NOT NULL UNIQUE
-                             CONSTRAINT ck_login_sin_espacios
-                             CHECK (nombre NOT LIKE '% %')
-    , password   VARCHAR(60) NOT NULL
-    , created_at   TIMESTAMP    DEFAULT CURRENT_TIMESTAMP
-    , confirmado BOOL        NOT NULL
-    , usuarios_id
-);
 
 DROP TABLE IF EXISTS categorias CASCADE;
 
@@ -65,6 +61,8 @@ CREATE TABLE votos
       ON DELETE CASCADE
       ON UPDATE CASCADE
     , comentario_id BIGINT REFERENCES comentarios(id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
     , votacion      BOOL   NOT NULL
     , PRIMARY KEY(usuario_id, comentario_id)
 );
@@ -87,12 +85,13 @@ CREATE TABLE movimientos
 ---------------------
 
 INSERT INTO usuarios (nombre,password,created_at,confirmado)
-     VALUES ('joni_182', crypt('joni', gen_salt('bf', 10)),null,true)
-          , ('admin', crypt('admin', gen_salt('bf', 10)),null,true)
-          , ('juan', crypt('juan', gen_salt('bf', 10)),null,false)
+     VALUES ('joni_182', crypt('joni', gen_salt('bf', 10)),CURRENT_TIMESTAMP,false)
+          , ('admin', crypt('admin', gen_salt('bf', 10)),CURRENT_TIMESTAMP,false)
+          , ('juan', crypt('juan', gen_salt('bf', 10)),CURRENT_TIMESTAMP,false)
           , ('maria', crypt('maria', gen_salt('bf', 10)),'2018-01-01 18:22:33',true)
           , ('jose', crypt('jose', gen_salt('bf', 10)),'2019-01-01 18:22:33',false)
-          , ('pepe', crypt('pepe', gen_salt('bf', 10)),'2019-02-03 18:22:33',false);
+          , ('pepe', crypt('pepe', gen_salt('bf', 10)),'2019-02-03 18:22:33',false)
+          , ('zeta', crypt('pepe', gen_salt('bf', 10)),'2019-09-03 18:22:33',false);
 
 
 
