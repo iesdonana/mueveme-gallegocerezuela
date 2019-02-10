@@ -181,7 +181,7 @@ class UsuariosController extends Controller
 
     public function actionVerificar()
     {
-        extract(Yii::$app->request->post('x_Usuarios'));
+        extract(Yii::$app->request->post('Usuarios'));
 
         $usuario = Usuarios::findByUserName($nombre);
 
@@ -190,11 +190,11 @@ class UsuariosController extends Controller
                 $usuario->confirmado = true;
                 if ($usuario->save()) {
                     Yii::$app->session->setFlash('success', 'Se ha verificado su usuario CORRECTAMENTE, puedes iniciar sesión.');
-                } else {
-                    // var_dump($usuario->errors);
-                    // die();
-                    Yii::$app->session->setFlash('error', 'ERROR: No se ha verificado su usuario correctamente1.');
+                    return $this->redirect(['site/login']);
                 }
+                // var_dump($usuario->errors);
+                // die();
+                Yii::$app->session->setFlash('error', 'ERROR: No se ha verificado su usuario correctamente1.');
             } else {
                 Yii::$app->session->setFlash('error', 'ERROR: No se ha verificado su usuario correctamente.');
             }
