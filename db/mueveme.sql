@@ -14,7 +14,9 @@ CREATE TABLE usuarios
     , email     VARCHAR(255) NOT NULL UNIQUE
     , confirmado BOOLEAN NOT NULL DEFAULT false
     , token     VARCHAR(32) NOT NULL
+    , created_at   TIMESTAMP    DEFAULT CURRENT_TIMESTAMP
 );
+
 
 DROP TABLE IF EXISTS categorias CASCADE;
 
@@ -33,6 +35,8 @@ CREATE TABLE noticias
     , descripcion  TEXT         NOT NULL
     , url          VARCHAR(255) NOT NULL -- ¿Le ponemos UNIQUE? ¿Le ponemos tambien un patrón? ¿Lo llamamos URL o URI? --
     , usuario_id   BIGINT       NOT NULL REFERENCES usuarios(id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
     , categoria_id BIGINT       REFERENCES categorias(id)
     , created_at   TIMESTAMP    DEFAULT CURRENT_TIMESTAMP
 );
@@ -44,6 +48,8 @@ CREATE TABLE comentarios
       id            BIGSERIAL PRIMARY KEY
     , texto         TEXT      NOT NULL
     , usuario_id    BIGINT    NOT NULL REFERENCES usuarios(id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
     , noticia_id    BIGINT    NOT NULL REFERENCES noticias(id)
     , comentario_id BIGINT    REFERENCES comentarios(id)
     , created_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -54,7 +60,11 @@ DROP TABLE IF EXISTS votos CASCADE;
 CREATE TABLE votos
 (
       usuario_id    BIGINT REFERENCES usuarios(id)
+      ON DELETE CASCADE
+      ON UPDATE CASCADE
     , comentario_id BIGINT REFERENCES comentarios(id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
     , votacion      BOOL   NOT NULL
     , PRIMARY KEY(usuario_id, comentario_id)
 );
