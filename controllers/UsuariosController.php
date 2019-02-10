@@ -221,6 +221,11 @@ class UsuariosController extends Controller
 
     public function actionModificarcontra()
     {
+        $post = Yii::$app->request->post();
+        $keys = preg_grep('/.*Usuarios.*/i', array_keys($post));
+
+        extract(Yii::$app->request->post($keys[1]));
+
         $model = $this->findModel($id);
         $model->scenario = Usuarios::SCENARIO_UPDATE;
 
@@ -230,12 +235,13 @@ class UsuariosController extends Controller
         }
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            Yii::$app->session->setFlash('success', 'Se ha modificado su contraseña correctamente.');
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
 
         $model->password = $model->password_repeat = '';
-        return $this->render('update', [
+        return $this->render('modificarcontra', [
             'model' => $model,
         ]);
     }

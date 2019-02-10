@@ -51,14 +51,14 @@ $config = [
         'formatter' => [
             'timeZone' => 'Europe/Madrid',
         ],
-        /*
+
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                'usuarios/modificarcontra' => 'usuarios/modificarcontra',
             ],
         ],
-        */
     ],
     'params' => $params,
 ];

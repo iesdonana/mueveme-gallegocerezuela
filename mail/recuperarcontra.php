@@ -11,7 +11,7 @@ use yii\widgets\ActiveForm;
     'action' => Url::to(['usuarios/modificarcontra'], true),
 ]);?>
 
-<?= $form->field($model, 'nombre')->hiddenInput()->label(false)  ?>
+<?= $form->field($model, 'id')->hiddenInput()->label(false)  ?>
 
 <button type="submit" name="button">Restablecer contraseña </button>
 <?php ActiveForm::end() ?>
