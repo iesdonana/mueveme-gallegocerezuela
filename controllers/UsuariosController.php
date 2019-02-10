@@ -181,7 +181,11 @@ class UsuariosController extends Controller
 
     public function actionVerificar()
     {
-        extract(Yii::$app->request->post('Usuarios'));
+        $post = Yii::$app->request->post();
+        $keys = preg_grep('/.*Usuarios.*/i', array_keys($post));
+
+
+        extract(Yii::$app->request->post($keys[1]));
 
         $usuario = Usuarios::findByUserName($nombre);
 
