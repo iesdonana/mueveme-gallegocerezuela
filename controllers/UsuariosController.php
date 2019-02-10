@@ -185,6 +185,7 @@ class UsuariosController extends Controller
         //extract(Yii::$app->request->post('x_Usuarios'));
         //A jose se le manda por post x_Usuarios y a joni Usuarios.
         //Tenemos que extraerlo de diferente forma cada uno, no sabemos el motivo.
+        //Esto de aqui abajo lo resuelve.
 
         $post = Yii::$app->request->post();
         $keys = preg_grep('/.*Usuarios.*/i', array_keys($post));
