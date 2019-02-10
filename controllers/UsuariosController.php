@@ -179,4 +179,23 @@ class UsuariosController extends Controller
     public function actionVerificar($model)
     {
     }
+
+    public function actionRecuperarcontra()
+    {
+        $emailNombre = Yii::$app->request->get('emailNombre');
+        $usuarioNombre = Usuarios::findByUsername($emailNombre);
+        $usuarioEmail = Usuarios::findByEmail($emailNombre);
+
+        if (isset($usuarioNombre) || isset($usuarioEmail)) {
+            if (isset($usuarioNombre)) {
+                $this->email($usuarioNombre->email);
+            } else {
+                $this->email($usuarioEmail->email);
+            }
+        } else {
+            Yii::$app->session->setFlash('error', 'El usuario o email no son correctos.');
+        }
+
+        return $this->render('recuperarcontra');
+    }
 }

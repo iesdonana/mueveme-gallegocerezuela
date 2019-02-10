@@ -92,6 +92,18 @@ class Usuarios extends \yii\db\ActiveRecord implements \yii\web\IdentityInterfac
     }
 
     /**
+     * Finds user by email.
+     *
+     * @param mixed $email
+     * @return static|null
+     */
+    public static function findByEmail($email)
+    {
+        return static::findOne(['email' => $email]);
+    }
+
+
+    /**
      * {@inheritdoc}
      */
     public function getId()
