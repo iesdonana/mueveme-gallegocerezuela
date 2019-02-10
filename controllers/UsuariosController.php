@@ -162,10 +162,12 @@ class UsuariosController extends Controller
 
     public function email($model)
     {
-        if (Yii::$app->mailer->compose('mail')
+        if (Yii::$app->mailer->compose('mail', [
+            'model' => $model,
+        ])
             ->setFrom('mueveme.gallego.cerezuela@gmail.com')
             ->setTo($model->email)
-            ->setSubject('Confirmación de email')
+            ->setSubject('Confirmación de usuario')
             // ->setTextBody('Esto es una prueba.')
             // ->setHtmlBody('<h1>Esto es una prueba</h1>')
             ->send()) {
@@ -178,7 +180,9 @@ class UsuariosController extends Controller
 
     public function email1($model)
     {
-        if (Yii::$app->mailer->compose('recuperarcontra')
+        if (Yii::$app->mailer->compose('recuperarcontra', [
+            'model' => $model,
+        ])
             ->setFrom('mueveme.gallego.cerezuela@gmail.com')
             ->setTo($model->email)
             ->setSubject('Recuperación de contraseña')
@@ -204,14 +208,35 @@ class UsuariosController extends Controller
 
             if (isset($usuarioNombre) || isset($usuarioEmail)) {
                 if (isset($usuarioNombre)) {
-                    $this->email1($usuarioNombre->email);
+                    $this->email1($usuarioNombre);
                 } else {
-                    $this->email1($usuarioEmail->email);
+                    $this->email1($usuarioEmail);
                 }
             } else {
                 Yii::$app->session->setFlash('error', 'El usuario o email no son correctos.');
             }
         }
         return $this->render('recuperarcontra');
+    }
+
+    public function actionModificarcontra()
+    {
+        $model = $this->findModel($id);
+        $model->scenario = Usuarios::SCENARIO_UPDATE;
+
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return ActiveForm::validate($model);
+        }
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
+        }
+
+
+        $model->password = $model->password_repeat = '';
+        return $this->render('update', [
+            'model' => $model,
+        ]);
     }
 }

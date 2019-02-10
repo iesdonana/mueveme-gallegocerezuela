@@ -8,11 +8,10 @@ use yii\widgets\ActiveForm;
 ?>
 <h2>Puedes reestablecer su contraseña desde el enlace de abajo.</h2>
 <?php $form = ActiveForm::begin([
-    'action' => Url::to(['usuarios/verificar'], true),
+    'action' => Url::to(['usuarios/modificarcontra'], true),
 ]);?>
 
 <?= $form->field($model, 'nombre')->hiddenInput()->label(false)  ?>
-<?= $form->field($model, 'token')->hiddenInput()->label(false)  ?>
 
 <button type="submit" name="button">Restablecer contraseña </button>
 <?php ActiveForm::end() ?>
