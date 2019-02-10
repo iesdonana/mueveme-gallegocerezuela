@@ -181,7 +181,9 @@ class UsuariosController extends Controller
 
     public function actionVerificar()
     {
-        extract(Yii::$app->request->post('Usuarios'));
+        extract(Yii::$app->request->post('x_Usuarios'));
+        //A jose se le manda por post x_Usuarios y a joni Usuarios.
+        //Tenemos que extraerlo de diferente forma cada uno, no sabemos el motivo.
 
         $usuario = Usuarios::findByUserName($nombre);
 
@@ -190,11 +192,11 @@ class UsuariosController extends Controller
                 $usuario->confirmado = true;
                 if ($usuario->save()) {
                     Yii::$app->session->setFlash('success', 'Se ha verificado su usuario CORRECTAMENTE, puedes iniciar sesión.');
-                    return $this->redirect(['site/login']);
+                } else {
+                    // var_dump($usuario->errors);
+                    // die();
+                    Yii::$app->session->setFlash('error', 'ERROR: No se ha verificado su usuario correctamente1.');
                 }
-                // var_dump($usuario->errors);
-                // die();
-                Yii::$app->session->setFlash('error', 'ERROR: No se ha verificado su usuario correctamente1.');
             } else {
                 Yii::$app->session->setFlash('error', 'ERROR: No se ha verificado su usuario correctamente.');
             }
