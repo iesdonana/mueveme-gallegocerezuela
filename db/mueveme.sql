@@ -6,13 +6,15 @@ DROP TABLE IF EXISTS usuarios CASCADE;
 
 CREATE TABLE usuarios
 (
-      id         BIGSERIAL   PRIMARY KEY
-      , nombre     VARCHAR(32) NOT NULL UNIQUE
-                               CONSTRAINT ck_login_sin_espacios
-                               CHECK (nombre NOT LIKE '% %')
-      , password   VARCHAR(60) NOT NULL
-      , created_at   TIMESTAMP    DEFAULT CURRENT_TIMESTAMP
-      , confirmado BOOL        NOT NULL
+      id        BIGSERIAL    PRIMARY KEY
+    , nombre    VARCHAR(32) NOT NULL UNIQUE
+                  CONSTRAINT ck_login_sin_espacios
+                  CHECK (nombre NOT LIKE '% %')
+    , password  VARCHAR(60) NOT NULL
+    , email     VARCHAR(255) NOT NULL UNIQUE
+    , confirmado BOOLEAN NOT NULL DEFAULT false
+    , token     VARCHAR(32) NOT NULL
+    , created_at   TIMESTAMP    DEFAULT CURRENT_TIMESTAMP
 );
 
 
@@ -84,14 +86,13 @@ CREATE TABLE movimientos
 -- Datos de prueba --
 ---------------------
 
-INSERT INTO usuarios (nombre,password,created_at,confirmado)
-     VALUES ('joni_182', crypt('joni', gen_salt('bf', 10)),CURRENT_TIMESTAMP,false)
-          , ('admin', crypt('admin', gen_salt('bf', 10)),CURRENT_TIMESTAMP,false)
-          , ('juan', crypt('juan', gen_salt('bf', 10)),CURRENT_TIMESTAMP,false)
-          , ('maria', crypt('maria', gen_salt('bf', 10)),'2018-01-01 18:22:33',true)
-          , ('jose', crypt('jose', gen_salt('bf', 10)),'2019-01-01 18:22:33',false)
-          , ('pepe', crypt('pepe', gen_salt('bf', 10)),'2019-02-03 18:22:33',false)
-          , ('zeta', crypt('pepe', gen_salt('bf', 10)),'2019-09-03 18:22:33',false);
+INSERT INTO usuarios (nombre,password,email,confirmado,token)
+     VALUES ('joni_182', crypt('joni', gen_salt('bf', 10)), 'joni@hotmail.com',true,'4-C_2yJQBe7L_X1zdmcHmKUaaY_utF4z')
+          , ('admin', crypt('admin', gen_salt('bf', 10)), 'admin@hotmail.com',true,'nkKtEnLf_k7KaL6yP4awzfT58JtnVhjV')
+          , ('juan', crypt('juan', gen_salt('bf', 10)), 'juan@hotmail.com',true,'7avF3wck6PrTJnRz-xKK1wHzQ7fFXBJb')
+          , ('maria', crypt('maria', gen_salt('bf', 10)), 'maria@hotmail.com',true,'dZNc6pkS2dmLU5DX0L61fFgevE0lJbq_')
+          , ('jose', crypt('jose', gen_salt('bf', 10)), 'jose@hotmail.com',true,'--ZLhXcaEnmKisl80GDlUGqtdBthQ5B4')
+          , ('pepe', crypt('pepe', gen_salt('bf', 10)), 'pepe@hotmail.com',true,'82gobDGVynEKeO-VqauHdXsc6Higwiqd');
 
 
 

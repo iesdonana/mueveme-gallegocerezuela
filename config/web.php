@@ -11,9 +11,10 @@ $config = [
     'name' => 'Mueveme',
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
-        '@npm'   => '@vendor/npm-asset',
+        '@npm' => '@vendor/npm-asset',
     ],
     'language' => 'es-ES',
+
     'components' => [
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
@@ -34,8 +35,8 @@ $config = [
             // send all mails to a file by default. You have to set
             // 'useFileTransport' to false and configure a transport
             // for the mailer to send real emails.
-            'useFileTransport' => true,
-            /*
+            'useFileTransport' => false,
+
             // comment the following array to send mail using php's mail function:
             'transport' => [
                 'class' => 'Swift_SmtpTransport',
@@ -45,21 +46,20 @@ $config = [
                 'port' => '587',
                 'encryption' => 'tls',
             ],
-            */
         ],
         'log' => $log,
         'db' => $db,
         'formatter' => [
             'timeZone' => 'Europe/Madrid',
         ],
-        /*
         'urlManager' => [
-            'enablePrettyUrl' => true,
+            'enablePrettyUrl' => false,
             'showScriptName' => false,
             'rules' => [
+                // 'usuarios/verificar' => 'usuarios/verificar',
+                'usuarios/modificarcontra' => 'usuarios/modificarcontra',
             ],
         ],
-        */
     ],
     'params' => $params,
 ];

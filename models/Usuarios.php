@@ -10,6 +10,9 @@ use Yii;
  * @property int $id
  * @property string $nombre
  * @property string $password
+ * @property string $email
+ * @property bool $confirmado
+ * @property string $token
  *
  * @property Comentarios[] $comentarios
  * @property Movimientos[] $movimientos
@@ -40,10 +43,16 @@ class Usuarios extends \yii\db\ActiveRecord implements \yii\web\IdentityInterfac
         return [
             [['nombre'], 'required'],
             [['nombre'], 'string', 'max' => 32],
-            [['nombre'], 'unique'],
+            [['nombre', 'email'], 'unique'],
             [['password', 'password_repeat'], 'required', 'on' => [self::SCENARIO_CREATE]],
-            [['password_repeat'], 'safe', 'on' => [self::SCENARIO_UPDATE]],
+            [['password_repeat', 'confirmado', 'token'], 'safe', 'on' => [self::SCENARIO_UPDATE]],
             [['password'], 'compare', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
+            [['email'], 'email', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
+            [['email'], 'unique', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
+            [['confirmado', 'token'], 'safe'],
+            [['token'], 'default', 'value' => function () {
+                return $this->token = Yii::$app->security->generateRandomString();
+            }],
         ];
     }
 
@@ -82,6 +91,18 @@ class Usuarios extends \yii\db\ActiveRecord implements \yii\web\IdentityInterfac
     {
         return static::findOne(['nombre' => $nombre]);
     }
+
+    /**
+     * Finds user by email.
+     *
+     * @param mixed $email
+     * @return static|null
+     */
+    public static function findByEmail($email)
+    {
+        return static::findOne(['email' => $email]);
+    }
+
 
     /**
      * {@inheritdoc}
@@ -181,6 +202,7 @@ class Usuarios extends \yii\db\ActiveRecord implements \yii\web\IdentityInterfac
 
         if ($insert) {
             if ($this->scenario === self::SCENARIO_CREATE) {
+                $this->confirmado = false;
                 $this->password = Yii::$app->security->generatePasswordHash($this->password);
             }
         } elseif ($this->scenario === self::SCENARIO_UPDATE) {
@@ -188,6 +210,9 @@ class Usuarios extends \yii\db\ActiveRecord implements \yii\web\IdentityInterfac
                 $this->password = $this->getOldAttribute('password');
             } else {
                 $this->password = Yii::$app->security->generatePasswordHash($this->password);
+            }
+            if ($this->email === '') {
+                $this->email = $this->getOldAttribute('email');
             }
         }
 

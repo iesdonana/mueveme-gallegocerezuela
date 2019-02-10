@@ -94,7 +94,14 @@ class UsuariosController extends Controller
         }
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            $this->email(
+                $model,
+                'mail',
+                'Confirmación de usuario',
+                'Se ha enviado un correo de confirmación, por favor, consulte su correo.',
+                'Ha habido un error al mandar el correo de confirmación.'
+            );
+            return;
         }
 
         return $this->render('create', [
@@ -158,5 +165,141 @@ class UsuariosController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    public function email($model, $vista, $asunto, $mensajeEnvio, $mensajeError)
+    {
+        if (Yii::$app->mailer->compose($vista, [
+            'model' => $model,
+        ])
+            ->setFrom('mueveme.gallego.cerezuela@gmail.com')
+            ->setTo($model->email)
+            ->setSubject($asunto)
+            // ->setTextBody('Esto es una prueba.')
+            // ->setHtmlBody('<h1>Esto es una prueba</h1>')
+            ->send()) {
+            Yii::$app->session->setFlash('success', $mensajeEnvio);
+        } else {
+            Yii::$app->session->setFlash('error', $mensajeError);
+        }
+        return $this->redirect(['site/index']);
+    }
+
+    public function actionVerificar()
+    {
+        //extract(Yii::$app->request->post('x_Usuarios'));
+        //A jose se le manda por post x_Usuarios y a joni Usuarios.
+        //Tenemos que extraerlo de diferente forma cada uno, no sabemos el motivo.
+        //Esto de aqui abajo lo resuelve.
+
+        $post = Yii::$app->request->post();
+        $keys = preg_grep('/.*Usuarios.*/i', array_keys($post));
+
+
+        extract(Yii::$app->request->post($keys[1]));
+
+        $usuario = Usuarios::findByUserName($nombre);
+
+        if (isset($usuario)) {
+            if ($usuario->token === $token) {
+                $usuario->confirmado = true;
+                if ($usuario->save()) {
+                    Yii::$app->session->setFlash('success', 'Se ha verificado su usuario CORRECTAMENTE, puedes iniciar sesión.');
+                } else {
+                    // var_dump($usuario->errors);
+                    // die();
+                    Yii::$app->session->setFlash('error', 'ERROR: No se ha verificado su usuario correctamente1.');
+                }
+            } else {
+                Yii::$app->session->setFlash('error', 'ERROR: No se ha verificado su usuario correctamente.');
+            }
+        } else {
+            Yii::$app->session->setFlash('error', 'ERROR: No se ha verificado.');
+        }
+        return $this->redirect(['site/index']);
+    }
+
+    public function actionRecuperarcontra()
+    {
+        if ($emailNombre = Yii::$app->request->post('emailNombre')) {
+            $usuarioNombre = Usuarios::findByUsername($emailNombre);
+            $usuarioEmail = Usuarios::findByEmail($emailNombre);
+
+            if (isset($usuarioNombre) || isset($usuarioEmail)) {
+                if (isset($usuarioNombre)) {
+                    $this->email(
+                        $usuarioNombre,
+                        'recuperarcontra',
+                        'Recuperación de contraseña',
+                        'Se ha enviado un correo para restablecer su contraseña ,porfavor, consulte su correo.',
+                        'Ha ocurrido un error al mandar el correo.'
+                        );
+                } else {
+                    $this->email(
+                        $usuarioEmail,
+                        'recuperarcontra',
+                        'Recuperación de contraseña',
+                        'Se ha enviado un correo para restablecer su contraseña ,porfavor, consulte su correo.',
+                        'Ha ocurrido un error al mandar el correo.'
+                        );
+                }
+            } else {
+                Yii::$app->session->setFlash('error', 'El usuario o email no son correctos.');
+            }
+        }
+        return $this->render('recuperarcontra');
+    }
+
+    public function actionModificarcontra()
+    {
+        $post = Yii::$app->request->post();
+        $keys = preg_grep('/.*Usuarios.*/i', array_keys($post));
+
+        extract(Yii::$app->request->post($keys[1]));
+
+        $model = $this->findModel($id);
+        $model->scenario = Usuarios::SCENARIO_UPDATE;
+
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return ActiveForm::validate($model);
+        }
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            Yii::$app->session->setFlash('success', 'Se ha modificado su contraseña correctamente.');
+            return $this->redirect(['site/index']);
+        }
+
+
+        $model->password = $model->password_repeat = '';
+        return $this->render('modificarcontra', [
+            'model' => $model,
+        ]);
+    }
+
+    public function actionRecuperarnick()
+    {
+        if ($email = Yii::$app->request->post('email')) {
+            $usuario = Usuarios::findByEmail($email);
+
+            if (isset($usuario)) {
+                $this->email(
+                    $usuario,
+                    'recuperarnick',
+                    'Recuperación del Nick',
+                    'Se ha enviado un correo para recordarle su nick ,porfavor, consulte su correo.',
+                    'Ha ocurrido un error al mandar el correo.'
+                    );
+            } else {
+                Yii::$app->session->setFlash('error', 'El email no es correcto.');
+            }
+        }
+        return $this->render('recuperarnick');
+    }
+
+    public function beforeAction($action)
+    {
+        $this->enableCsrfValidation = false;
+        return parent::beforeAction($action);
     }
 }
