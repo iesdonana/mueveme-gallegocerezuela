@@ -12,7 +12,7 @@ CREATE TABLE usuarios
                   CHECK (nombre NOT LIKE '% %')
     , password  VARCHAR(60) NOT NULL
     , email     VARCHAR(255) NOT NULL
-    , confirmado BOOLEAN NOT NULL
+    , confirmado BOOLEAN NOT NULL DEFAULT false
     , token     VARCHAR(32) NOT NULL
 );
 

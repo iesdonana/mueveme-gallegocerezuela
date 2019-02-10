@@ -179,6 +179,21 @@ class UsuariosController extends Controller
         return $this->redirect(['site/index']);
     }
 
+    public function email1($model)
+    {
+        if (Yii::$app->mailer->compose('recuperarcontra', [
+            'model' => $model,
+        ])
+            ->setFrom('mueveme.gallego.cerezuela@gmail.com')
+            ->setTo($model->email)
+            ->setSubject('Recuperación de contraseña')
+            // ->setTextBody('Esto es una prueba.')
+            // ->setHtmlBody('<h1>Esto es una prueba</h1>')
+            ->send()) {
+            Yii::$app->session->setFlash('success', 'Se ha enviado un correo para restablecer su contraseña ,porfavor, consulte su correo.');
+        } else {
+            Yii::$app->session->setFlash('error', 'Ha habido un error al mandar el correo.');
+          
     public function actionVerificar()
     {
 
@@ -212,6 +227,52 @@ class UsuariosController extends Controller
             Yii::$app->session->setFlash('error', 'ERROR: No se ha verificado.');
         }
         return $this->redirect(['site/index']);
+    }
+
+    public function actionRecuperarcontra()
+    {
+        if ($emailNombre = Yii::$app->request->post('emailNombre')) {
+            $usuarioNombre = Usuarios::findByUsername($emailNombre);
+            $usuarioEmail = Usuarios::findByEmail($emailNombre);
+
+            if (isset($usuarioNombre) || isset($usuarioEmail)) {
+                if (isset($usuarioNombre)) {
+                    $this->email1($usuarioNombre);
+                } else {
+                    $this->email1($usuarioEmail);
+                }
+            } else {
+                Yii::$app->session->setFlash('error', 'El usuario o email no son correctos.');
+            }
+        }
+        return $this->render('recuperarcontra');
+    }
+
+    public function actionModificarcontra()
+    {
+        $post = Yii::$app->request->post();
+        $keys = preg_grep('/.*Usuarios.*/i', array_keys($post));
+
+        extract(Yii::$app->request->post($keys[1]));
+
+        $model = $this->findModel($id);
+        $model->scenario = Usuarios::SCENARIO_UPDATE;
+
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return ActiveForm::validate($model);
+        }
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            Yii::$app->session->setFlash('success', 'Se ha modificado su contraseña correctamente.');
+            return $this->redirect(['site/index']);
+        }
+
+
+        $model->password = $model->password_repeat = '';
+        return $this->render('modificarcontra', [
+            'model' => $model,
+        ]);
     }
 
     public function beforeAction($action)

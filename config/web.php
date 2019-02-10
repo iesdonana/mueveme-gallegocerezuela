@@ -57,6 +57,7 @@ $config = [
             'showScriptName' => false,
             'rules' => [
                 // 'usuarios/verificar' => 'usuarios/verificar',
+                'usuarios/modificarcontra' => 'usuarios/modificarcontra',
             ],
         ],
     ],
