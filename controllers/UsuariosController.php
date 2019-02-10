@@ -94,7 +94,8 @@ class UsuariosController extends Controller
         }
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['email']);
+            $this->email($model);
+            return;
         }
 
         return $this->render('create', [
@@ -192,12 +193,40 @@ class UsuariosController extends Controller
             Yii::$app->session->setFlash('success', 'Se ha enviado un correo para restablecer su contraseña ,porfavor, consulte su correo.');
         } else {
             Yii::$app->session->setFlash('error', 'Ha habido un error al mandar el correo.');
+          
+    public function actionVerificar()
+    {
+
+        //extract(Yii::$app->request->post('x_Usuarios'));
+        //A jose se le manda por post x_Usuarios y a joni Usuarios.
+        //Tenemos que extraerlo de diferente forma cada uno, no sabemos el motivo.
+        //Esto de aqui abajo lo resuelve.
+
+        $post = Yii::$app->request->post();
+        $keys = preg_grep('/.*Usuarios.*/i', array_keys($post));
+
+
+        extract(Yii::$app->request->post($keys[1]));
+
+        $usuario = Usuarios::findByUserName($nombre);
+
+        if (isset($usuario)) {
+            if ($usuario->token === $token) {
+                $usuario->confirmado = true;
+                if ($usuario->save()) {
+                    Yii::$app->session->setFlash('success', 'Se ha verificado su usuario CORRECTAMENTE, puedes iniciar sesión.');
+                } else {
+                    // var_dump($usuario->errors);
+                    // die();
+                    Yii::$app->session->setFlash('error', 'ERROR: No se ha verificado su usuario correctamente1.');
+                }
+            } else {
+                Yii::$app->session->setFlash('error', 'ERROR: No se ha verificado su usuario correctamente.');
+            }
+        } else {
+            Yii::$app->session->setFlash('error', 'ERROR: No se ha verificado.');
         }
         return $this->redirect(['site/index']);
-    }
-
-    public function actionVerificar($model)
-    {
     }
 
     public function actionRecuperarcontra()

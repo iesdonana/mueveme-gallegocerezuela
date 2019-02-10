@@ -45,7 +45,7 @@ class Usuarios extends \yii\db\ActiveRecord implements \yii\web\IdentityInterfac
             [['nombre'], 'string', 'max' => 32],
             [['nombre'], 'unique'],
             [['password', 'password_repeat'], 'required', 'on' => [self::SCENARIO_CREATE]],
-            [['password_repeat'], 'safe', 'on' => [self::SCENARIO_UPDATE]],
+            [['password_repeat', 'confirmado', 'token'], 'safe', 'on' => [self::SCENARIO_UPDATE]],
             [['password'], 'compare', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
             [['email'], 'email', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
             [['confirmado', 'token'], 'safe'],
@@ -201,6 +201,7 @@ class Usuarios extends \yii\db\ActiveRecord implements \yii\web\IdentityInterfac
 
         if ($insert) {
             if ($this->scenario === self::SCENARIO_CREATE) {
+                $this->confirmado = false;
                 $this->password = Yii::$app->security->generatePasswordHash($this->password);
             }
         } elseif ($this->scenario === self::SCENARIO_UPDATE) {

@@ -11,7 +11,7 @@ CREATE TABLE usuarios
                   CONSTRAINT ck_login_sin_espacios
                   CHECK (nombre NOT LIKE '% %')
     , password  VARCHAR(60) NOT NULL
-    , email     VARCHAR(255) NOT NULL UNIQUE
+    , email     VARCHAR(255) NOT NULL
     , confirmado BOOLEAN NOT NULL DEFAULT false
     , token     VARCHAR(32) NOT NULL
 );

@@ -22,6 +22,8 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'password_repeat')->passwordInput(['maxlength' => true]) ?>
 
+    <?= $form->field($model, 'confirmado')->hiddenInput() ?>
+
     <div class="form-group">
         <?= Html::submitButton($this->title, ['class' => 'btn btn-success']) ?>
     </div>
