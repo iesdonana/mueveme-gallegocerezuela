@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\Comentarios;
+use app\models\Movimientos;
 use app\models\Noticias;
 use app\models\NoticiasSearch;
 use Yii;
@@ -48,6 +49,16 @@ class NoticiasController extends Controller
             'accessCreate' => [
             'class' => \yii\filters\AccessControl::className(),
             'only' => ['create'],
+            'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
+            'accessMenear' => [
+            'class' => \yii\filters\AccessControl::className(),
+            'only' => ['menear'],
             'rules' => [
                     [
                         'allow' => true,
@@ -196,5 +207,15 @@ class NoticiasController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    public function actionMenear()
+    {
+        $model = new Movimientos();
+
+        if (Yii::$app->request->isAjax) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return ActiveForm::save($model);
+        }
     }
 }

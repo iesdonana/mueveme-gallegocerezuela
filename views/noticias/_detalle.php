@@ -1,6 +1,6 @@
 <?php
 use app\helpers\DomainExtractor;
-
+use yii\widgets\ActiveForm;
 use yii\helpers\Html;
 ?>
 <style media="screen">
@@ -10,7 +10,14 @@ use yii\helpers\Html;
 </style>
 <div class="row">
     <div class="col-md-2" style='padding:70px'>
-        <button type="submit" name="button" class='btn btn-info'>Muévelo</button>
+
+        <?php $form = ActiveForm::begin([
+            'enableAjaxValidation' => true,
+            'action' => ['noticias/menear'],
+        ]); ?>
+            <button type="submit" name="button" class='btn btn-info'>Muévelo</button>
+        <?php ActiveForm::end(); ?>
+
         <?php $contador = 0?>
         <?php foreach ($model->movimientos as $movimiento): ?>
             <?php if ($movimiento->noticia_id === $model->id) {
