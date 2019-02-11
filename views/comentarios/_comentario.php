@@ -1,6 +1,7 @@
 <?php
 use app\models\Comentarios;
 
+use yii\helpers\Url;
 use yii\helpers\Html;
 ?>
 <style media="screen">
@@ -44,12 +45,24 @@ use yii\helpers\Html;
             <?= $model->texto  ?>
         </div>
     </div>
-        <div class="votos">
-            <button class='btn btn-xs btn-success' type="button" name="button">
-                <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> <?= $model->positivos  ?>
-            </button>
-            <button class='btn btn-xs btn-danger' type="button" name="button">
-                <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span> <?= $model->negativos  ?>
-            </button>
+        <div class="row votos">
+            <div class="col-md-1">
+                <?= Html::beginForm(Url::to(['votos/registrar'])) ?>
+                <?= Html::hiddenInput('votacion', 'true') ?>
+                <?= Html::hiddenInput('comentario_id', $model->id) ?>
+                <button class='btn btn-xs btn-success' type="submit">
+                    <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> <?= $model->positivos  ?>
+                </button>
+                <?= Html::endForm() ?>
+            </div>
+            <div>
+                <?= Html::beginForm(Url::to(['votos/registrar'])) ?>
+                <?= Html::hiddenInput('votacion', 'false') ?>
+                <?= Html::hiddenInput('comentario_id', $model->id) ?>
+                <button class='btn btn-xs btn-danger' type="submit" >
+                    <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span> <?= $model->negativos  ?>
+                </button>
+                <?= Html::endForm() ?>
+            </div>
         </div>
 </div>

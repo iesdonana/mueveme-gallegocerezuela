@@ -35,8 +35,8 @@ CREATE TABLE noticias
     , descripcion  TEXT         NOT NULL
     , url          VARCHAR(255) NOT NULL -- ¿Le ponemos UNIQUE? ¿Le ponemos tambien un patrón? ¿Lo llamamos URL o URI? --
     , usuario_id   BIGINT       NOT NULL REFERENCES usuarios(id)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE
+                                ON DELETE CASCADE
+                                ON UPDATE CASCADE
     , categoria_id BIGINT       REFERENCES categorias(id)
     , created_at   TIMESTAMP    DEFAULT CURRENT_TIMESTAMP
 );
@@ -48,8 +48,8 @@ CREATE TABLE comentarios
       id            BIGSERIAL PRIMARY KEY
     , texto         TEXT      NOT NULL
     , usuario_id    BIGINT    NOT NULL REFERENCES usuarios(id)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE
+                              ON DELETE CASCADE
+                              ON UPDATE CASCADE
     , noticia_id    BIGINT    NOT NULL REFERENCES noticias(id)
     , comentario_id BIGINT    REFERENCES comentarios(id)
     , created_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -59,14 +59,17 @@ DROP TABLE IF EXISTS votos CASCADE;
 
 CREATE TABLE votos
 (
-      usuario_id    BIGINT REFERENCES usuarios(id)
-      ON DELETE CASCADE
-      ON UPDATE CASCADE
-    , comentario_id BIGINT REFERENCES comentarios(id)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE
-    , votacion      BOOL   NOT NULL
-    , PRIMARY KEY(usuario_id, comentario_id)
+      id            BIGSERIAL PRIMARY KEY
+    , usuario_id    BIGINT    NOT NULL
+                              REFERENCES usuarios(id)
+                              ON DELETE CASCADE
+                              ON UPDATE CASCADE
+    , comentario_id BIGINT    NOT NULL
+                              REFERENCES comentarios(id)
+                              ON DELETE CASCADE
+                              ON UPDATE CASCADE
+    , votacion      BOOL      NOT NULL
+    , UNIQUE(usuario_id, comentario_id)
 );
 
 DROP TABLE IF EXISTS movimientos CASCADE;
@@ -115,12 +118,11 @@ INSERT INTO noticias (titulo, descripcion, url, usuario_id, categoria_id)
 
 INSERT INTO comentarios (texto, usuario_id, noticia_id, comentario_id)
      VALUES ('Mola lo de la soldadura', 2, 1, null)
-          , ('Mola lo de la soldadura', 3, 1, null)
           , ('Pues si que mola', 3, 1, 1)
-          , ('Pues a mi no me gusra', 3, 3, 1)
+          , ('Pues a mi no me gusra', 3, 1, 1)
           , ('Lo de la hipertensión es una mierda', 1, 3, null);
 
-INSERT INTO votos (usuario_id, comentario_id, votacion)
+/* INSERT INTO votos (usuario_id, comentario_id, votacion)
      VALUES (1, 2, true)
           , (1, 3, true)
           , (2, 3, false)
@@ -129,7 +131,7 @@ INSERT INTO votos (usuario_id, comentario_id, votacion)
           , (4, 1, false)
           , (4, 2, true)
           , (4, 3, false)
-          , (1, 4, true);
+          , (1, 4, true); */
 
 INSERT INTO movimientos (usuario_id, noticia_id)
      VALUES (1, 2)
