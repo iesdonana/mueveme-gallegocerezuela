@@ -38,6 +38,7 @@ AppAsset::register($this);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => [
+            ['label' => 'Portada', 'url' => ['/noticias/portada']],
             ['label' => 'Nuevas', 'url' => ['/noticias/candidatas']],
             ['label' => 'Crear Noticia', 'url' => ['/noticias/create']],
             ['label' => 'Home', 'url' => ['/site/index']],

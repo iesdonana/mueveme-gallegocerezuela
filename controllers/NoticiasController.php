@@ -16,6 +16,7 @@ use yii\web\NotFoundHttpException;
  */
 class NoticiasController extends Controller
 {
+    const MENEOS_MIN_PORTADA = 2;
     /**
      * {@inheritdoc}
      */
@@ -71,6 +72,27 @@ class NoticiasController extends Controller
         return $this->render('listar', [
             'dataProvider' => $provider,
             'titulo' => 'Noticias Nuevas',
+        ]);
+    }
+
+    public function actionPortada()
+    {
+        $query = Noticias::find()
+        ->joinWith('movimientos')
+        ->groupBy('id')
+        ->having(['>', 'count(noticia_id)', self::MENEOS_MIN_PORTADA])
+        ->orderBy('created_at DESC');
+
+        $provider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => [
+                'pageSize' => 10,
+            ],
+        ]);
+
+        return $this->render('listar', [
+            'dataProvider' => $provider,
+            'titulo' => 'Portada',
         ]);
     }
 
