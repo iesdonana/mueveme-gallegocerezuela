@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\Comentarios;
 use app\models\Noticias;
+use app\models\NoticiasSearch;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\filters\VerbFilter;
@@ -91,6 +92,17 @@ class NoticiasController extends Controller
         return $this->render('view', [
             'model' => $this->findModel($id),
             'comentarios' => $comentarios,
+        ]);
+    }
+
+    public function actionIndex()
+    {
+        $searchModel = new NoticiasSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
         ]);
     }
 
