@@ -4,8 +4,8 @@ namespace app\controllers;
 
 use app\models\Comentarios;
 use app\models\Noticias;
-use app\models\NoticiasSearch;
 use Yii;
+use yii\data\ActiveDataProvider;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -56,18 +56,20 @@ class NoticiasController extends Controller
         ];
     }
 
-    /**
-     * Lists all Noticias models.
-     * @return mixed
-     */
-    public function actionIndex()
+    public function actionCandidatas()
     {
-        $searchModel = new NoticiasSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $query = Noticias::find()->orderBy('created_at DESC');
 
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
+        $provider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => [
+                'pageSize' => 10,
+            ],
+        ]);
+
+        return $this->render('listar', [
+            'dataProvider' => $provider,
+            'titulo' => 'Noticias Nuevas',
         ]);
     }
 
