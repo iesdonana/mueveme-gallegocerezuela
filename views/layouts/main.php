@@ -38,11 +38,9 @@ AppAsset::register($this);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => [
-            ['label' => 'Noticias', 'url' => ['/noticias/index']],
+            ['label' => 'Nuevas', 'url' => ['/noticias/candidatas']],
             ['label' => 'Crear Noticia', 'url' => ['/noticias/create']],
             ['label' => 'Home', 'url' => ['/site/index']],
-            ['label' => 'About', 'url' => ['/site/about']],
-            ['label' => 'Contact', 'url' => ['/site/contact']],
             Yii::$app->user->isGuest ? (
                 '<li>'
                 . Html::hiddenInput(
