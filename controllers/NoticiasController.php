@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\Categorias;
 use app\models\Comentarios;
 use app\models\Noticias;
 use app\models\NoticiasSearch;
@@ -56,6 +57,28 @@ class NoticiasController extends Controller
                 ],
             ],
         ];
+    }
+
+    public function actionPorCategoria($categoria_id)
+    {
+        $categoria = $this->buscarCategoria($categoria_id);
+
+        $query = Noticias::find()
+        ->filterWhere(['categoria_id' => $categoria->id])
+        ->orderBy('created_at DESC');
+
+        $provider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => [
+                'pageSize' => 10,
+            ],
+        ]);
+
+        return $this->render('listar', [
+            'dataProvider' => $provider,
+            'titulo' => "Noticias de {$categoria->categoria}",
+            'selected' => $categoria_id,
+        ]);
     }
 
     public function actionCandidatas()
@@ -192,6 +215,15 @@ class NoticiasController extends Controller
     protected function findModel($id)
     {
         if (($model = Noticias::findOne($id)) !== null) {
+            return $model;
+        }
+
+        throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    protected function buscarCategoria($id)
+    {
+        if (($model = Categorias::findOne($id)) !== null) {
             return $model;
         }
 
