@@ -8,6 +8,12 @@ use yii\helpers\Html;
     #meneos{
         text-align: center;
     }
+
+    img {
+      margin-top: 30px;
+      width: 18%;
+      height: auto;
+    }
 </style>
 <div class="row">
     <div class="col-md-2" style='padding:70px'>
@@ -29,13 +35,17 @@ use yii\helpers\Html;
     </div>
 
     <div class="cl-md-3">
-        <?php if (preg_grep(
-            "/^{$model->id}/",
-            $imagen = BuscaImagen::noticia($model->id
-            ): ?>
-
-                <?= Html::img("@uploads/{$imagen[0]}") ?>
-        <?php endif; ?>
+        <?php
+            $urlImg = ($imagen = BuscaImagen::noticia($model->id))
+            ?
+            $imagen
+            :
+            'default.jpg';
+        ?>
+        <?= Html::img(
+            Yii::getAlias('@uploads/') . $urlImg,
+            ['class' => 'img-thumbnail embed-responsive-item']
+            ) ?>
     </div>
 
 </div>

@@ -24,7 +24,7 @@ class BuscaImagen
     public static function noticia($noticia_id)
     {
         if ($imagen = preg_grep("/^{$noticia_id}/", $imagen = self::listaFicheros(Yii::getAlias('@uploads/.')))) {
-            return $imagen[0];
+            return array_values($imagen)[0];
         }
         return false;
     }
