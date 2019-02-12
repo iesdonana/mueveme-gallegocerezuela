@@ -31,7 +31,7 @@ use yii\helpers\Html;
     <div class="cl-md-3">
         <?php if (preg_grep(
             "/^{$model->id}/",
-            $imagen = BuscaImagen::listaFicheros(Yii::getAlias("@uploads/.")))
+            $imagen = BuscaImagen::noticia($model->id
             ): ?>
 
                 <?= Html::img("@uploads/{$imagen[0]}") ?>

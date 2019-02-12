@@ -2,6 +2,8 @@
 
 namespace app\helpers;
 
+use Yii;
+
 /**
  * La funcion de esta clase es sacar el dominio de un sitio.
  */
@@ -17,5 +19,13 @@ class BuscaImagen
             }
         }
         return $listaFicheros;
+    }
+
+    public static function noticia($noticia_id)
+    {
+        if ($imagen = preg_grep("/^{$noticia_id}/", $imagen = self::listaFicheros(Yii::getAlias('@uploads/.')))) {
+            return $imagen[0];
+        }
+        return false;
     }
 }
