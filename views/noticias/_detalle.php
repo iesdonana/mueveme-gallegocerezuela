@@ -1,4 +1,5 @@
 <?php
+use app\helpers\BuscaImagen;
 use app\helpers\DomainExtractor;
 
 use yii\helpers\Html;
@@ -6,6 +7,12 @@ use yii\helpers\Html;
 <style media="screen">
     #meneos{
         text-align: center;
+    }
+
+    img {
+      margin-top: 30px;
+      width: 18%;
+      height: auto;
     }
 </style>
 <div class="row">
@@ -19,12 +26,26 @@ use yii\helpers\Html;
         <?php endforeach; ?>
         <p id='meneos' class='col-md-offset-3'><?=$contador?> meneos</p>
     </div>
-    <div class="col-md-9">
+    <div class="col-md-7">
         <h3><?= Html::a($model->titulo, $model->url) ?></h3>
         <p>por <strong><?= $model->usuario->nombre ?></strong> a <strong><?= DomainExtractor::fromUrl($model->url) ?></strong>  publicado <?= Yii::$app->formatter->asDatetime($model->created_at)  ?></p>
         <p><?= $model->descripcion ?></p>
         <p>| <strong>Categoria: <?= $model->categoria->categoria ?></strong></p>
         <p><strong> <?= Html::a($model->numeroComentarios().' comentarios', ['noticias/view', 'id' => $model->id])  ?></strong> </p>
-
     </div>
+
+    <div class="cl-md-3">
+        <?php
+            $urlImg = ($imagen = BuscaImagen::noticia($model->id))
+            ?
+            $imagen
+            :
+            'default.jpg';
+        ?>
+        <?= Html::img(
+            Yii::getAlias('@uploads/') . $urlImg,
+            ['class' => 'img-thumbnail embed-responsive-item']
+            ) ?>
+    </div>
+
 </div>

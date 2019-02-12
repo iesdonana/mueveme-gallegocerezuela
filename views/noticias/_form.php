@@ -31,6 +31,8 @@ use kartik\select2\Select2
 ?>
 
 
+    <?= $form->field($imagenForm, 'imageFile')->fileInput() ?>
+
     <div class="form-group">
         <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
     </div>
