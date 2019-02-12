@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use kartik\select2\Select2
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Noticias */
@@ -20,7 +21,15 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'usuario_id')->hiddenInput()->label(false) ?>
 
-    <?= $form->field($model, 'categoria_id')->dropDownList(\app\models\Categorias::categoriasDisponibles()) ?>
+    <?= $form->field($model, 'categoria_id')->widget(Select2::classname(), [
+    'data' => \app\models\Categorias::categoriasDisponibles(),
+    'options' => ['placeholder' => 'Selecciona una categoria...'],
+    'pluginOptions' => [
+        'allowClear' => true
+        ],
+    ]);
+?>
+
 
     <div class="form-group">
         <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
