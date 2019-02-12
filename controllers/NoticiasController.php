@@ -6,11 +6,13 @@ use app\models\Categorias;
 use app\models\Comentarios;
 use app\models\Noticias;
 use app\models\NoticiasSearch;
+use app\models\UploadForm;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\web\UploadedFile;
 
 /**
  * NoticiasController implements the CRUD actions for Noticias model.
@@ -158,17 +160,38 @@ class NoticiasController extends Controller
      */
     public function actionCreate()
     {
+        $imagenForm = new UploadForm();
         $model = new Noticias();
 
         $model->usuario_id = Yii::$app->user->id;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $imagenForm->imageFile = UploadedFile::getInstance($imagenForm, 'imageFile');
+            if (!$imagenForm->upload($model->id)) {
+                Yii::$app->session->setFlash([
+                    'error',
+                    'Error: La imagen no se ha podido registrar',
+                ]);
+            }
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('create', [
             'model' => $model,
+            'imagenForm' => $imagenForm,
         ]);
+    }
+
+    public function actionSubir()
+    {
+        if (Yii::$app->request->isPost) {
+            $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
+            if ($model->upload()) {
+                // file is uploaded successfully
+                return $this->redirect(['site/index']);
+            }
+        }
+        return $this->render('subir', ['model' => $model]);
     }
 
     /**
@@ -204,6 +227,7 @@ class NoticiasController extends Controller
 
         return $this->redirect(['index']);
     }
+
 
     /**
      * Finds the Noticias model based on its primary key value.

@@ -22,6 +22,8 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'categoria_id')->dropDownList(\app\models\Categorias::categoriasDisponibles()) ?>
 
+    <?= $form->field($imagenForm, 'imageFile')->fileInput() ?>
+
     <div class="form-group">
         <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
     </div>
