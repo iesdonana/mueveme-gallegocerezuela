@@ -27,7 +27,8 @@
         "yiisoft/yii2-faker": "~2.0.0",
         "yiisoft/yii2-shell": "dev-master",
         "yiisoft/yii2-apidoc": "dev-project",
-
+        "kartik-v/yii2-widget-select2": "dev-master",
+        
         "codeception/codeception": "^2.3.0",
         "codeception/verify": "^1.0.0",
         "codeception/specify": "^1.0.0",
