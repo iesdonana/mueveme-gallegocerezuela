@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use kartik\password\StrengthValidator;
 use Yii;
 
 /**
@@ -46,6 +47,7 @@ class Usuarios extends \yii\db\ActiveRecord implements \yii\web\IdentityInterfac
             [['nombre', 'email'], 'unique'],
             [['password', 'password_repeat'], 'required', 'on' => [self::SCENARIO_CREATE]],
             [['password_repeat', 'confirmado', 'token'], 'safe', 'on' => [self::SCENARIO_UPDATE]],
+            [['password'], StrengthValidator::className(), 'preset' => 'normal', 'userAttribute' => 'nombre'],
             [['password'], 'compare', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
             [['email'], 'email', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
             [['email'], 'unique', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
