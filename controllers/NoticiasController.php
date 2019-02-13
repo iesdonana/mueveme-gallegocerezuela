@@ -212,10 +212,13 @@ class NoticiasController extends Controller
     public function actionMenear()
     {
         $model = new Movimientos();
-
+        $numero = 4;
         if (Yii::$app->request->isAjax) {
-            Yii::$app->response->format = Response::FORMAT_JSON;
-            return ActiveForm::save($model);
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
+                Yii::$app->response->format = Response::FORMAT_JSON;
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
         }
+        return $this->redirect(['view', 'id' => $numero]);
     }
 }

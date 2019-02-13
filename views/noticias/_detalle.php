@@ -2,6 +2,9 @@
 use app\helpers\DomainExtractor;
 use yii\widgets\ActiveForm;
 use yii\helpers\Html;
+use yii\helpers\Url;
+use app\models\Movimientos;
+use yii\web\View;
 ?>
 <style media="screen">
     #meneos{
@@ -11,12 +14,7 @@ use yii\helpers\Html;
 <div class="row">
     <div class="col-md-2" style='padding:70px'>
 
-        <?php $form = ActiveForm::begin([
-            'enableAjaxValidation' => true,
-            'action' => ['noticias/menear'],
-        ]); ?>
-            <button type="submit" name="button" class='btn btn-info'>Muévelo</button>
-        <?php ActiveForm::end(); ?>
+        <button type="submit" name="button" class='btn btn-info'>Muévelo</button>
 
         <?php $contador = 0?>
         <?php foreach ($model->movimientos as $movimiento): ?>
@@ -24,6 +22,24 @@ use yii\helpers\Html;
                 $contador++;
             }?>
         <?php endforeach; ?>
+        <?php
+            $url = Url::to(['noticias/menear']);
+            $usuario_id = Yii::$app->user->identity->id;
+            $noticia_id = $model->id;
+
+            $this->registerJs("$(':submit').click(function(){
+                $.ajax({
+                    url: ".$url.",
+                    type: 'post',
+                    data: {
+                        usuario_id: ".$usuario_id.",
+                        noticia_id: ".$noticia_id.",
+                    },
+                    success: function(data){
+                        $('#meneos').html(". $contador++ .");
+                    }
+                })
+            });",View::POS_READY); ?>
         <p id='meneos' class='col-md-offset-3'><?=$contador?> meneos</p>
     </div>
     <div class="col-md-9">
