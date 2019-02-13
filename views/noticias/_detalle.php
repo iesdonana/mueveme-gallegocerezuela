@@ -11,13 +11,10 @@ use yii\widgets\ActiveForm;
     #meneos{
         text-align: center;
     }
-
-    img {
-      margin-top: 30px;
-      width: 18%;
-      height: auto;
-    }
 </style>
+<?php
+$sizeCol = ($imagen = BuscaImagen::noticia($model->id)) ? 7 : 9;
+?>
 <div class="row">
     <div class="col-md-2" style='padding:70px'>
         <button type="submit" name="button" class='btn btn-info'>Muévelo</button>
@@ -29,7 +26,7 @@ use yii\widgets\ActiveForm;
         <?php endforeach; ?>
         <p id='meneos' class='col-md-offset-3'><?=$contador?> meneos</p>
     </div>
-    <div class="col-md-7">
+    <div class="col-md-<?= $sizeCol  ?>">
         <h3><?= Html::a($model->titulo, $model->url) ?></h3>
         <p>por <strong><?= $model->usuario->nombre ?></strong> a <strong><?= DomainExtractor::fromUrl($model->url) ?></strong>  publicado <?= Yii::$app->formatter->asDatetime($model->created_at)  ?></p>
         <p><?= $model->descripcion ?></p>
@@ -37,19 +34,14 @@ use yii\widgets\ActiveForm;
         <p><strong> <?= Html::a($model->numeroComentarios().' comentarios', ['noticias/view', 'id' => $model->id])  ?></strong> </p>
     </div>
 
-    <div class="cl-md-3">
-        <?php
-            $urlImg = ($imagen = BuscaImagen::noticia($model->id))
-            ?
-            $imagen
-            :
-            'default.jpg';
-        ?>
+<?php if ($imagen): ?>
+    <div class="col-md-3">
         <?= Html::img(
-            Yii::getAlias('@uploads/') . $urlImg,
+            Yii::getAlias('@uploads/') . $imagen,
             ['class' => 'img-thumbnail embed-responsive-item']
             ) ?>
     </div>
+<?php endif; ?>
 </div>
 <br>
 <!--Hago esta comprobación para que no me pinte la caja de comentarios
