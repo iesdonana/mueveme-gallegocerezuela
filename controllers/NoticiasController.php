@@ -256,7 +256,6 @@ class NoticiasController extends Controller
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
-<<<<<<< HEAD
     protected function buscarCategoria($id)
     {
         if (($model = Categorias::findOne($id)) !== null) {
@@ -264,7 +263,8 @@ class NoticiasController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
-=======
+    }
+
     public function actionMenear()
     {
         $model = new Movimientos();
@@ -276,6 +276,5 @@ class NoticiasController extends Controller
             }
         }
         return $this->redirect(['view', 'id' => $numero]);
->>>>>>> 6e623adb24bd0c864a1de54067aec3a1f71a0819
     }
 }
