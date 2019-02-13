@@ -24,10 +24,10 @@ class CategoriasController extends Controller
         $out = ['results' => ['id' => '', 'text' => '']];
         if ($q !== null) {
             $query = new Query();
-            $query->select('id, categoria AS text')
+            Categorias::find()->select('id, categoria')
              ->from('categorias')
              ->where(['ilike', 'categoria', $q])
-             ->limit(20);
+             ->limit(20)->isArray();
             $command = $query->createCommand();
             $data = $command->queryAll();
             $out['results'] = array_values($data);
