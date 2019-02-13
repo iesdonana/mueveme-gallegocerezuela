@@ -96,7 +96,7 @@ class ComentariosController extends Controller
         $model = new Comentarios();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['noticias/view', 'id' => $model->noticia_id]);
         }
 
         return $this->render('create', [
