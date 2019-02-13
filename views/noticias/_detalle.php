@@ -3,6 +3,7 @@ use app\helpers\BuscaImagen;
 use app\helpers\DomainExtractor;
 
 use yii\helpers\Html;
+use yii\widgets\ActiveForm;
 ?>
 <style media="screen">
     #meneos{
@@ -47,5 +48,31 @@ use yii\helpers\Html;
             ['class' => 'img-thumbnail embed-responsive-item']
             ) ?>
     </div>
-
 </div>
+<br>
+<!--Hago esta comprobación para que no me pinte la caja de comentarios
+en portada, ni nuevas, tan solo cuando entre a ver los comentarios de una noticia.-->
+<?php if (isset($_GET['id'])): ?>
+
+<div class="row">
+    <div class="col-md-offset-1">
+
+    <?php $form = ActiveForm::begin([
+        'method' => 'post',
+        'action' => ['comentarios/create'],
+    ]); ?>
+
+    <?= Html::textarea('texto','',['cols' => 100, 'rows' => 4]) ?>
+    <?= Html::hiddenInput('usuario_id',$model->usuario->id) ?>
+    <?= Html::hiddenInput('noticia_id',$model->id) ?>
+    <?= Html::hiddenInput('comentario_id',null) ?>
+
+    <div class="form-group">
+        <?= Html::submitButton('Comentar', ['class' => 'btn btn-success']) ?>
+    </div>
+
+    <?php ActiveForm::end(); ?>
+
+    </div>
+</div>
+<?php endif; ?>
