@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\Categorias;
 use app\models\Comentarios;
+use app\models\Movimientos;
 use app\models\Noticias;
 use app\models\NoticiasSearch;
 use app\models\UploadForm;
@@ -51,6 +52,16 @@ class NoticiasController extends Controller
             'accessCreate' => [
             'class' => \yii\filters\AccessControl::className(),
             'only' => ['create'],
+            'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
+            'accessMenear' => [
+            'class' => \yii\filters\AccessControl::className(),
+            'only' => ['menear'],
             'rules' => [
                     [
                         'allow' => true,
@@ -245,6 +256,7 @@ class NoticiasController extends Controller
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
+<<<<<<< HEAD
     protected function buscarCategoria($id)
     {
         if (($model = Categorias::findOne($id)) !== null) {
@@ -252,5 +264,18 @@ class NoticiasController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+=======
+    public function actionMenear()
+    {
+        $model = new Movimientos();
+        $numero = 4;
+        if (Yii::$app->request->isAjax) {
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
+                Yii::$app->response->format = Response::FORMAT_JSON;
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+        }
+        return $this->redirect(['view', 'id' => $numero]);
+>>>>>>> 6e623adb24bd0c864a1de54067aec3a1f71a0819
     }
 }
