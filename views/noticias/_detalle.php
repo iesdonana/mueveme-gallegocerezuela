@@ -1,7 +1,9 @@
 <?php
 use app\helpers\BuscaImagen;
 use app\helpers\DomainExtractor;
+use app\models\Comentarios;
 
+use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 ?>
@@ -52,26 +54,27 @@ use yii\widgets\ActiveForm;
 <br>
 <!--Hago esta comprobación para que no me pinte la caja de comentarios
 en portada, ni nuevas, tan solo cuando entre a ver los comentarios de una noticia.-->
-<?php if (isset($_GET['id'])): ?>
+<?php if (isset($_GET['id']) && !Yii::$app->user->isGuest): ?>
 
 <div class="row">
     <div class="col-md-offset-1">
+        <?php
+        $comentario = new Comentarios();
+        $comentario->noticia_id = $model->id;
+        $comentario->usuario_id = Yii::$app->user->identity->id;
+        $comentario->texto = '';
+        $comentario->comentario_id = null;
 
-    <?php $form = ActiveForm::begin([
-        'method' => 'post',
-        'action' => ['comentarios/create'],
-    ]); ?>
-
-    <?= Html::textarea('texto','',['cols' => 100, 'rows' => 4]) ?>
-    <?= Html::hiddenInput('usuario_id',$model->usuario->id) ?>
-    <?= Html::hiddenInput('noticia_id',$model->id) ?>
-    <?= Html::hiddenInput('comentario_id',null) ?>
-
-    <div class="form-group">
-        <?= Html::submitButton('Comentar', ['class' => 'btn btn-success']) ?>
-    </div>
-
-    <?php ActiveForm::end(); ?>
+        $form = ActiveForm::begin([
+            'method' => 'POST',
+            'action' => Url::to(['comentarios/create']),
+            ]) ?>
+            <?= $form->field($comentario, 'texto')->textarea()->label('Comentar') ?>
+            <?= $form->field($comentario, 'comentario_id')->hiddenInput()->label(false) ?>
+            <?= $form->field($comentario, 'noticia_id')->hiddenInput()->label(false) ?>
+            <?= $form->field($comentario, 'usuario_id')->hiddenInput()->label(false) ?>
+            <button class="btn btn-xs btn-success" type="submit" name="button">Comentar</button>
+        <?php ActiveForm::end() ?>
 
     </div>
 </div>
