@@ -21,7 +21,9 @@
         "yiisoft/yii2-bootstrap": "~2.0.0",
         "yiisoft/yii2-swiftmailer": "~2.1.0",
         "kartik-v/yii2-widget-select2": "dev-master",
-        "kartik-v/yii2-password": "dev-master"
+        "kartik-v/yii2-password": "dev-master",
+        "spatie/dropbox-api": "^1.7",
+        "spatie/flysystem-dropbox": "^1.0"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "dev-master",
