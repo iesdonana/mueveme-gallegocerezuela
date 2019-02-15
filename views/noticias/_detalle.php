@@ -5,6 +5,7 @@ use yii\widgets\ActiveForm;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use app\models\Movimientos;
+use app\models\Comentarios;
 use yii\web\View;
 ?>
 
