@@ -265,16 +265,14 @@ class NoticiasController extends Controller
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
-    public function actionMenear()
+    public function actionMenear($usuario_id, $noticia_id, $contador)
     {
-        $model = new Movimientos();
-        $numero = 4;
+        $model = new Movimientos(['usuario_id' => $usuario_id, 'noticia_id' => $noticia_id]);
         if (Yii::$app->request->isAjax) {
-            if ($model->load(Yii::$app->request->post()) && $model->save()) {
-                Yii::$app->response->format = Response::FORMAT_JSON;
-                return $this->redirect(['view', 'id' => $model->id]);
+            if ($model->save()) {
+                \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+                return ++$contador;
             }
         }
-        return $this->redirect(['view', 'id' => $numero]);
     }
 }
