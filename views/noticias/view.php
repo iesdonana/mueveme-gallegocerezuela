@@ -11,6 +11,11 @@ $this->params['breadcrumbs'][] = ['label' => 'Noticias', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
+<style media="screen">
+    ul {
+        list-style:none;
+    }
+</style>
 <div class="noticias-view">
 
     <div class="">
@@ -18,10 +23,26 @@ $this->params['breadcrumbs'][] = $this->title;
             'model' => $model,
             ]) ?>
     </div>
-    <div style="padding-top:50px">
-        <?= $this->render('/comentarios/_comentarios_todos',[
-            'comentarios' => $comentarios,
-            ])  ?>
-    </div>
+</div>
+<div class="row">
+<?php
+pintarComentarios($comentarios, $this);
 
+function pintarComentarios($comentarios, $vista)
+{
+    ?>
+    <?php if ($comentarios) : ?>
+        <ul>
+        <?php foreach ($comentarios as $comentario) : ?>
+            <li>
+                <?= $vista->render('/comentarios/_comentario',[
+                    'model' => $comentario
+                    ]) ?>
+                <?php pintarComentarios($comentario->comentariosHijos(), $vista)?>
+            </li>
+        <?php endforeach ?>
+        </ul>
+<?php endif;
+}
+?>
 </div>
