@@ -6,11 +6,11 @@ use yii\helpers\Html;
 ?>
 <style media="screen">
 .comentario {
-    padding: 5px;
+    padding: 10px;
 }
 
 .comentario-cuerpo {
-    background-color: #fff5ed;
+    background-color: #e8edff;
     position: relative;
     padding: 5px 10px 5px 30px;
     border-radius: 6px;
