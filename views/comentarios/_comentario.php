@@ -13,7 +13,10 @@ use yii\helpers\Html;
     background-color: #fff5ed;
     position: relative;
     padding: 5px 10px 5px 30px;
-    border-radius: 2px;
+    border-radius: 6px;
+    -webkit-box-shadow: 7px 7px 45px -23px rgba(0,0,0,0.75);
+    -moz-box-shadow: 7px 7px 45px -23px rgba(0,0,0,0.75);
+    box-shadow: 7px 7px 45px -23px rgba(0,0,0,0.75);
 }
 
 .comentario-texto {
@@ -45,7 +48,7 @@ use yii\helpers\Html;
             <?= $model->texto  ?>
         </div>
     </div>
-        <div class="row votos">
+        <div class="row votos" style="margin-button:10">
             <div class="col-md-1">
                 <?= Html::beginForm(Url::to(['votos/registrar'])) ?>
                 <?= Html::hiddenInput('votacion', 'true') ?>
