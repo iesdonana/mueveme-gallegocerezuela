@@ -30,7 +30,10 @@ $this->params['breadcrumbs'][] = $this->title;
 
             ['class' => 'yii\grid\ActionColumn', 'buttons' => [
                 'bann' => function ($url, $model, $key) {
-                    return $model->id ? Html::a('Banear', Url::to(['usuarios/banear', 'id'=>$model->id])) : '';
+                    return
+                    Yii::$app->user->identity->nombre === 'admin'
+                    ? Html::a('Banear', Url::to(['usuarios/banear', 'id'=>$model->id]))
+                    : '';
                 },
     ], 'template' => '{view} {update} {delete} {bann}'],
         ],
