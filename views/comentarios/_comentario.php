@@ -49,6 +49,7 @@ use yii\helpers\Html;
         </div>
     </div>
         <div class="row votos" style="margin-button:10">
+
             <div class="col-md-1">
                 <?= Html::beginForm(Url::to(['votos/registrar'])) ?>
                 <?= Html::hiddenInput('votacion', 'true') ?>
@@ -58,7 +59,7 @@ use yii\helpers\Html;
                 </button>
                 <?= Html::endForm() ?>
             </div>
-            <div>
+            <div class="col-md-1">
                 <?= Html::beginForm(Url::to(['votos/registrar'])) ?>
                 <?= Html::hiddenInput('votacion', 'false') ?>
                 <?= Html::hiddenInput('comentario_id', $model->id) ?>
@@ -67,5 +68,13 @@ use yii\helpers\Html;
                 </button>
                 <?= Html::endForm() ?>
             </div>
+            <div class="contestar col-md-offset-9 col-md-1">
+                <?= Html::button('Contestar', [
+                    'class' => 'btn btn-primary btn-xs',
+                    'data-toggle' => 'modal',
+                    'data-target' => '#exampleModal',
+                    'data-whatever' => "@mdo"
+                    ]) ?>
+                </div>
         </div>
 </div>
