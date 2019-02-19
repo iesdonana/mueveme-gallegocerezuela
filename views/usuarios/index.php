@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\grid\GridView;
 
 /* @var $this yii\web\View */
@@ -27,7 +28,11 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'nombre',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            ['class' => 'yii\grid\ActionColumn', 'buttons' => [
+                'bann' => function ($url, $model, $key) {
+                    return $model->id ? Html::a('Banear', Url::to(['usuarios/banear', 'id'=>$model->id])) : '';
+                },
+    ], 'template' => '{view} {update} {delete} {bann}'],
         ],
     ]); ?>
 </div>

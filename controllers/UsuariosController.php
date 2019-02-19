@@ -25,7 +25,7 @@ class UsuariosController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::class,
-                'only' => ['update', 'create'],
+                'only' => ['update', 'create', 'banear'],
                 'rules' => [
                     [
                         'allow' => true,
@@ -39,6 +39,14 @@ class UsuariosController extends Controller
                         'allow' => true,
                         'actions' => ['create'],
                         'roles' => ['?'],
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['banear'],
+                        'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) {
+                            return Yii::$app->user->identity->nombre === 'admin';
+                        },
                     ],
                 ],
             ],
@@ -301,5 +309,9 @@ class UsuariosController extends Controller
     {
         $this->enableCsrfValidation = false;
         return parent::beforeAction($action);
+    }
+
+    public function actionBanear($id)
+    {
     }
 }
