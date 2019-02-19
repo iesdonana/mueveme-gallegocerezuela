@@ -61,7 +61,7 @@ class ComentariosController extends Controller
         $comentarioPadreId = Yii::$app->request->post()['Comentarios']['comentario_id'];
 
 
-        if (!($model = Comentarios::findOne($comentarioPadreId)) || $model->comentario_id !== null) {
+        if (!($model = Comentarios::findOne($comentarioPadreId))) {
             throw new InvalidValueException('Comentario no valido');
         }
 

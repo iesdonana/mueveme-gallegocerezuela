@@ -3,6 +3,8 @@ use app\models\Comentarios;
 
 use yii\helpers\Url;
 use yii\helpers\Html;
+
+use yii\widgets\ActiveForm;
 ?>
 <style media="screen">
 .comentario {
@@ -41,14 +43,15 @@ use yii\helpers\Html;
                     <?= Yii::$app
                     ->formatter
                     ->asDateTime($model->created_at, 'short') ?>
-            </p>
+                </p>
 
+            </div>
+            <div class="comentario-texto">
+                <?= $model->texto  ?>
+            </div>
         </div>
-        <div class="comentario-texto">
-            <?= $model->texto  ?>
-        </div>
-    </div>
         <div class="row votos" style="margin-button:10">
+
             <div class="col-md-1">
                 <?= Html::beginForm(Url::to(['votos/registrar'])) ?>
                 <?= Html::hiddenInput('votacion', 'true') ?>
@@ -58,7 +61,7 @@ use yii\helpers\Html;
                 </button>
                 <?= Html::endForm() ?>
             </div>
-            <div>
+            <div class="col-md-1">
                 <?= Html::beginForm(Url::to(['votos/registrar'])) ?>
                 <?= Html::hiddenInput('votacion', 'false') ?>
                 <?= Html::hiddenInput('comentario_id', $model->id) ?>
@@ -67,5 +70,15 @@ use yii\helpers\Html;
                 </button>
                 <?= Html::endForm() ?>
             </div>
+            <?php if (!Yii::$app->user->isGuest): ?>
+                <div class="contestar col-md-offset-9 col-md-1">
+                    <?= Html::button('Contestar', [
+                        'class' => 'btn btn-primary btn-xs',
+                        'data-toggle' => 'modal',
+                        'data-target' => '#respuestaModal',
+                        'data-id' => $model->id,
+                        ]) ?>
+                    </div>
+                <?php endif; ?>
+            </div>
         </div>
-</div>
