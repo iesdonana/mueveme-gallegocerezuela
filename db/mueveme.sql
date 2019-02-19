@@ -85,6 +85,17 @@ CREATE TABLE movimientos
     , PRIMARY KEY(usuario_id, noticia_id)
 );
 
+DROP TABLE IF EXISTS baneados CASCADE;
+
+CREATE TABLE baneados
+(
+      id            BIGSERIAL PRIMARY KEY,
+      usuario_id BIGINT REFERENCES usuarios(id)
+                        ON DELETE CASCADE
+                        ON UPDATE CASCADE
+    , fecha TIMESTAMP   NOT NULL
+);
+
 ---------------------
 -- Datos de prueba --
 ---------------------
