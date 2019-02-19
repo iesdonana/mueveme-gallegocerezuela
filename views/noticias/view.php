@@ -1,6 +1,10 @@
 <?php
 
+use app\models\Comentarios;
+
+use yii\helpers\Url;
 use yii\helpers\Html;
+use yii\widgets\ActiveForm;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
@@ -46,3 +50,51 @@ function pintarComentarios($comentarios, $vista)
 }
 ?>
 </div>
+<?php $respuesta = new Comentarios([
+    'usuario_id' => Yii::$app->user->identity->id,
+    'noticia_id' => $model->id,
+]);
+
+//var_dump($respuesta);die();
+    ?>
+<?php if (!Yii::$app->user->isGuest): ?>
+        <!-- modal -->
+
+        <div class="modal fade" id="respuestaModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="exampleModalLabel">Nueva respuesta</h4>
+                    </div>
+                    <div class="modal-body">
+                        <?php $form = ActiveForm::begin([
+                            'action' => Url::to(['comentarios/responder-comentario']),
+                            ]) ?>
+                        <?= $form->field($respuesta, 'noticia_id')->hiddenInput()->label(false) ?>
+                        <?= $form->field($respuesta, 'comentario_id')->hiddenInput(['class' => 'respuesta_id'])->label(false) ?>
+                        <?= $form->field($respuesta, 'usuario_id')->hiddenInput()->label(false) ?>
+                            <?= $form->field($respuesta, 'texto')->textarea()->label(false) ?>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-primary">Enviar respuesta</button>
+                    </div>
+                    <?php $form->end() ?>
+                </div>
+            </div>
+        </div>
+    <?php endif; ?>
+
+<?php
+$js = <<<EOF
+$('#respuestaModal').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget)
+    var id = button.data('id')
+    var modal = $(this)
+    modal.find('.respuesta_id').val(id)
+})
+EOF;
+
+$this->registerJs($js);
+?>
