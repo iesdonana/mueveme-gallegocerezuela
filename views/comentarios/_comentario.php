@@ -7,8 +7,14 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 ?>
 <style media="screen">
+
+.right{
+    float: right;
+    margin-top: 7px; 
+}
+
 .comentario {
-    padding: 10px;
+    padding: 17px;
 }
 
 .comentario-cuerpo {
@@ -25,13 +31,30 @@ use yii\widgets\ActiveForm;
     padding-left: 10px;
 }
 
-.votos {
-    padding-left: 10px;
-    padding-top: 3px;
-}
+
 </style>
 <div class="row comentario">
-    <div class="comentario-cuerpo">
+    <div class="votos col-md-1">
+
+        <div class="right">
+            <?= Html::beginForm(Url::to(['votos/registrar'])) ?>
+            <?= Html::hiddenInput('votacion', 'true') ?>
+            <?= Html::hiddenInput('comentario_id', $model->id) ?>
+            <button class='btn btn-xs btn-success' type="submit">
+                <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> <?= $model->positivos  ?>
+            </button>
+            <?= Html::endForm() ?>
+
+            <?= Html::beginForm(Url::to(['votos/registrar'])) ?>
+            <?= Html::hiddenInput('votacion', 'false') ?>
+            <?= Html::hiddenInput('comentario_id', $model->id) ?>
+            <button class='btn btn-xs btn-danger' type="submit" >
+                <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span> <?= $model->negativos  ?>
+            </button>
+            <?= Html::endForm() ?>
+        </div>
+    </div>
+    <div class="comentario-cuerpo col-md-11">
         <div class="comentario-cabecera">
             <p>
                 <?= Html::a($model
@@ -43,42 +66,24 @@ use yii\widgets\ActiveForm;
                     <?= Yii::$app
                     ->formatter
                     ->asDateTime($model->created_at, 'short') ?>
-                </p>
-
-            </div>
-            <div class="comentario-texto">
-                <?= $model->texto  ?>
-            </div>
+            </p>
         </div>
-        <div class="row votos" style="margin-button:10">
-
-            <div class="col-md-1">
-                <?= Html::beginForm(Url::to(['votos/registrar'])) ?>
-                <?= Html::hiddenInput('votacion', 'true') ?>
-                <?= Html::hiddenInput('comentario_id', $model->id) ?>
-                <button class='btn btn-xs btn-success' type="submit">
-                    <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> <?= $model->positivos  ?>
-                </button>
-                <?= Html::endForm() ?>
-            </div>
-            <div class="col-md-1">
-                <?= Html::beginForm(Url::to(['votos/registrar'])) ?>
-                <?= Html::hiddenInput('votacion', 'false') ?>
-                <?= Html::hiddenInput('comentario_id', $model->id) ?>
-                <button class='btn btn-xs btn-danger' type="submit" >
-                    <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span> <?= $model->negativos  ?>
-                </button>
-                <?= Html::endForm() ?>
-            </div>
-            <?php if (!Yii::$app->user->isGuest): ?>
-                <div class="contestar col-md-offset-9 col-md-1">
-                    <?= Html::button('Contestar', [
-                        'class' => 'btn btn-primary btn-xs',
-                        'data-toggle' => 'modal',
-                        'data-target' => '#respuestaModal',
-                        'data-id' => $model->id,
-                        ]) ?>
-                    </div>
-                <?php endif; ?>
-            </div>
+        <div class="comentario-texto">
+            <?= $model->texto  ?>
         </div>
+    </div>
+
+    <div class="">
+
+    <?php if (!Yii::$app->user->isGuest): ?>
+        <div class="contestar col-md-offset-11 col-md-1">
+            <?= Html::button('Contestar', [
+                'class' => 'btn btn-primary btn-xs',
+                'data-toggle' => 'modal',
+                'data-target' => '#respuestaModal',
+                'data-id' => $model->id,
+                ]) ?>
+        </div>
+    <?php endif; ?>
+    </div>
+</div>
