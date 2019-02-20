@@ -10,22 +10,39 @@ use yii\web\View;
 ?>
 
 <style media="screen">
+    #boton-mueveme{
+        margin: 10px;
+    }
     #meneos{
         text-align: center;
+        font-weight: bold;
+        color: #ffffff
+    }
+    .meneos{
+          text-align: center;
+    }
+    #cuadrado {
+        height: 90px;
+        width: 100px;
+        background-color: #84cbe3;
+        border-radius: 7px;
+        display: inline-block;
     }
 </style>
 <?php
 $sizeCol = ($imagen = BuscaImagen::noticia($model->id)) ? 7 : 9;
 ?>
-<div class="row">
-    <div class="col-md-2" style='padding:70px'>
+<div class="row ">
+    <div class="col-md-2" style='padding:70px;'>
         <?php $contador = 0?>
         <?php foreach ($model->movimientos as $movimiento): ?>
             <?php if ($movimiento->noticia_id === $model->id) {
                 $contador++;
             }?>
         <?php endforeach; ?>
-        <button type="submit" name="button" class='btn btn-info' data-noticia="<?= $model->id ?>"
+
+        <div id="cuadrado">
+        <button type="submit" id="boton-mueveme" name="button" class='btn btn-info' data-noticia="<?= $model->id ?>"
             data-contador='<?= $contador ?>'>Muévelo</button>
         <?php
 
@@ -57,8 +74,9 @@ EOF;
             $this->registerJs($js);
         }
         ?>
-        <p name='meneos' id="meneos" class='col-md-offset-3'><?=$contador?> meneos</p>
+        <p name='meneos' id="meneos"><?=$contador?> meneos</p>
     </div>
+</div>
     <div class="col-md-<?= $sizeCol  ?>">
         <h3><?= Html::a($model->titulo, $model->url) ?></h3>
         <p>por <strong><?= $model->usuario->nombre ?></strong> a <strong><?= DomainExtractor::fromUrl($model->url) ?></strong>  publicado <?= Yii::$app->formatter->asDatetime($model->created_at)  ?></p>
