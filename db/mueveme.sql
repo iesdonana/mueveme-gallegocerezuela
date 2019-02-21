@@ -68,7 +68,9 @@ CREATE TABLE votos
                               REFERENCES comentarios(id)
                               ON DELETE CASCADE
                               ON UPDATE CASCADE
-    , votacion      BOOL      NOT NULL
+    , votacion      SMALLINT  NOT NULL
+                              CONSTRAINT ck_votacion_valida
+                              CHECK votacion IN (1, -1)
     , UNIQUE(usuario_id, comentario_id)
 );
 
