@@ -86,6 +86,13 @@ class Comentarios extends \yii\db\ActiveRecord
         //     'sql' => 'select c.*, (select count(v.comentario_id) from votos v  where v.votacion = true and v.comentario_id = c.id) as votos_positivos,(select count(comentario_id) from votos v where v.votacion = false and v.comentario_id = c.id) as votos_negativos from comentarios c left join votos v  on c.comentario_id = v.comentario_id group by c.id',
         // ]);
 
+        /*
+        No sé hacerlo sin subconsultas, ya que al final lo que busco es contabilizar
+        cuantos votos positivos hay y cuantas votos negativas hay, por separado.
+        No me interesa saber el computo total tras sumar los positivos a los
+        negativos.
+         */
+
         $select = <<<'EOF'
         c.*, (SELECT COUNT(v.comentario_id)
                 FROM votos v
