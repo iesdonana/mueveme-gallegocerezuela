@@ -89,11 +89,11 @@ class Comentarios extends \yii\db\ActiveRecord
         $select = <<<'EOF'
         c.*, (SELECT COUNT(v.comentario_id)
                 FROM votos v
-               WHERE v.votacion = true
+               WHERE v.votacion = 1
                  AND v.comentario_id = c.id)
                   AS positivos,(SELECT COUNT(comentario_id)
                                   FROM votos v
-                                 WHERE v.votacion = false
+                                 WHERE v.votacion = -1
                                    AND v.comentario_id = c.id)
                                    AS negativos
 EOF;

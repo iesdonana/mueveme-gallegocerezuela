@@ -10,7 +10,7 @@ use yii\widgets\ActiveForm;
 
 .right{
     float: right;
-    margin-top: 7px; 
+    margin-top: 7px;
 }
 
 .comentario {
@@ -38,7 +38,7 @@ use yii\widgets\ActiveForm;
 
         <div class="right">
             <?= Html::beginForm(Url::to(['votos/registrar'])) ?>
-            <?= Html::hiddenInput('votacion', 'true') ?>
+            <?= Html::hiddenInput('votacion', '1') ?>
             <?= Html::hiddenInput('comentario_id', $model->id) ?>
             <button class='btn btn-xs btn-success' type="submit">
                 <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> <?= $model->positivos  ?>
@@ -46,7 +46,7 @@ use yii\widgets\ActiveForm;
             <?= Html::endForm() ?>
 
             <?= Html::beginForm(Url::to(['votos/registrar'])) ?>
-            <?= Html::hiddenInput('votacion', 'false') ?>
+            <?= Html::hiddenInput('votacion', '-1') ?>
             <?= Html::hiddenInput('comentario_id', $model->id) ?>
             <button class='btn btn-xs btn-danger' type="submit" >
                 <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span> <?= $model->negativos  ?>

@@ -70,7 +70,7 @@ CREATE TABLE votos
                               ON UPDATE CASCADE
     , votacion      SMALLINT  NOT NULL
                               CONSTRAINT ck_votacion_valida
-                              CHECK votacion IN (1, -1)
+                              CHECK (votacion IN (1, -1))
     , UNIQUE(usuario_id, comentario_id)
 );
 

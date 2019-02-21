@@ -44,9 +44,8 @@ class VotosController extends Controller
         $comentario_id = Yii::$app->request->post('comentario_id');
         $votacion = filter_var(
             Yii::$app->request->post('votacion'),
-            FILTER_VALIDATE_BOOLEAN
+            FILTER_VALIDATE_INT
         );
-
         $usuario_id = Yii::$app->user->identity->id;
 
         $voto = Votos::find()
@@ -59,7 +58,7 @@ class VotosController extends Controller
             if ($voto->votacion == $votacion) {
                 return $this->redirect(['/noticias/view', 'id' => $voto->comentario->noticia_id]);
             }
-            $voto->votacion = !$voto->votacion;
+            $voto->votacion = $voto->votacion === 1 ? -1 : 1;
         } else {
             $voto = new Votos([
                 'comentario_id' => $comentario_id,
