@@ -41,7 +41,6 @@ AppAsset::register($this);
             ['label' => 'Portada', 'url' => ['/noticias/portada']],
             ['label' => 'Nuevas', 'url' => ['/noticias/candidatas']],
             ['label' => 'Crear Noticia', 'url' => ['/noticias/create']],
-            ['label' => 'Home', 'url' => ['/site/index']],
             Yii::$app->user->isGuest ? (
                 '<li>'
                 . Html::hiddenInput(
