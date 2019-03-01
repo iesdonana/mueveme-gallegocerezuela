@@ -157,10 +157,12 @@ class NoticiasController extends Controller
     {
         $searchModel = new NoticiasSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $hola = 'hola';
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'hola' => $hola,
         ]);
     }
 
