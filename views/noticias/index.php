@@ -37,8 +37,7 @@ $this->params['breadcrumbs'][] = $this->title;
              */
             [
                 'class' => DataColumn::class,
-                'header' => 'Numero de Movimientos',
-                'attribute' => 'nMovimientos',
+                'attribute' => 'n_movimientos',
                 'value' => function ($model, $key, $index, $column){
                     return count($model->movimientos);
                 },
