@@ -4,22 +4,36 @@ namespace app\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Noticias;
 
 /**
  * NoticiasSearch represents the model behind the search form of `\app\models\Noticias`.
  */
 class NoticiasSearch extends Noticias
 {
+    /*
+    2. Agregamos la variable que soportara al atributo en el que se cargara la busqueda.
+     */
+    public $nMovimientos;
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
         return [
-            [['id', 'usuario_id', 'categoria_id'], 'integer'],
+            /*
+            3. Lo agregamos a las reglas para que se pueda cargar de forma masiva
+             */
+            [['id', 'usuario_id', 'categoria_id', 'nMovimientos'], 'integer'],
             [['titulo', 'descripcion', 'url', 'created_at'], 'safe'],
         ];
+    }
+
+    public function attributes()
+    {
+        /*
+        4. Lo agregamos como atributo
+         */
+        return array_merge(parent::attributes(), ['nMovimientos']);
     }
 
     /**
@@ -32,7 +46,7 @@ class NoticiasSearch extends Noticias
     }
 
     /**
-     * Creates data provider instance with search query applied
+     * Creates data provider instance with search query applied.
      *
      * @param array $params
      *
@@ -40,7 +54,12 @@ class NoticiasSearch extends Noticias
      */
     public function search($params)
     {
-        $query = Noticias::find();
+        /*
+        5. Modificamos la query para poder buscar lo que queremos. Como queremos
+        buscar por el numero de movimientos tenemos que conbinar movimientos y
+        hacer luego un count() tenemos que agrupar por noticias.id
+         */
+        $query = Noticias::find()->joinWith('movimientos')->groupBy('noticias.id');
 
         // add conditions that should always apply here
 
@@ -68,6 +87,10 @@ class NoticiasSearch extends Noticias
             ->andFilterWhere(['ilike', 'descripcion', $this->descripcion])
             ->andFilterWhere(['ilike', 'url', $this->url]);
 
+        /*
+        6. Agregamos al andFilterHaving() la condicion.
+         */
+        $query->andFilterHaving(['count(movimientos.noticia_id)' => $this->nMovimientos]);
         return $dataProvider;
     }
 }

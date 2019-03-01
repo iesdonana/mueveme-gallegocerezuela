@@ -1,5 +1,7 @@
 <?php
 
+use yii\grid\DataColumn;
+
 use yii\helpers\Html;
 use yii\grid\GridView;
 
@@ -30,6 +32,18 @@ $this->params['breadcrumbs'][] = $this->title;
             'descripcion:ntext',
             'url:url',
             'usuario_id',
+            /*
+             1. Aqui hemos agregado una columna más, con DataColumn podemos agregar las columnas que queramos
+             */
+            [
+                'class' => DataColumn::class,
+                'header' => 'Numero de Movimientos',
+                'attribute' => 'nMovimientos',
+                'value' => function ($model, $key, $index, $column){
+                    return count($model->movimientos);
+                },
+            ],
+
             //'categoria_id',
             //'created_at',
 
