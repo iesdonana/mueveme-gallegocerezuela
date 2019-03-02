@@ -4,7 +4,6 @@ namespace app\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Noticias;
 
 /**
  * NoticiasSearch represents the model behind the search form of `\app\models\Noticias`.
@@ -18,8 +17,19 @@ class NoticiasSearch extends Noticias
     {
         return [
             [['id', 'usuario_id', 'categoria_id'], 'integer'],
-            [['titulo', 'descripcion', 'url', 'created_at'], 'safe'],
+            /*
+            2. lo ponemos como seguro.
+             */
+            [['titulo', 'descripcion', 'url', 'created_at', 'usuario.nombre'], 'safe'],
         ];
+    }
+
+    public function attributes()
+    {
+        /*
+        Lo agregamos como atributo
+         */
+        return array_merge(parent::attributes(), ['usuario.nombre']);
     }
 
     /**
@@ -32,7 +42,7 @@ class NoticiasSearch extends Noticias
     }
 
     /**
-     * Creates data provider instance with search query applied
+     * Creates data provider instance with search query applied.
      *
      * @param array $params
      *
@@ -40,7 +50,11 @@ class NoticiasSearch extends Noticias
      */
     public function search($params)
     {
-        $query = Noticias::find();
+        /*
+        3. Lo combinamos con la tabla usuarios, notese que se coloca el nombre
+        de la relacion (usuario) y no el de la tabla (usuarios)
+         */
+        $query = Noticias::find()->joinWith('usuario');
 
         // add conditions that should always apply here
 
@@ -48,7 +62,17 @@ class NoticiasSearch extends Noticias
             'query' => $query,
         ]);
 
+
         $this->load($params);
+        /*
+        4. La ordenacion. Imprtante dentro de $dataProvider->sort->attributes[]
+        se coloca el nombre del atributo(relacion.atributo) y en "asc" y "desc"
+        se coloca el nombre de la columna de la base de datos(tabla.columna)
+        */
+        $dataProvider->sort->attributes['usuario.nombre'] = [
+            'asc' => ['usuarios.nombre' => SORT_ASC],
+            'desc' => ['usuarios.nombre' => SORT_DESC],
+        ];
 
         if (!$this->validate()) {
             // uncomment the following line if you do not want to return any records when validation fails
@@ -66,7 +90,16 @@ class NoticiasSearch extends Noticias
 
         $query->andFilterWhere(['ilike', 'titulo', $this->titulo])
             ->andFilterWhere(['ilike', 'descripcion', $this->descripcion])
-            ->andFilterWhere(['ilike', 'url', $this->url]);
+            ->andFilterWhere(['ilike', 'url', $this->url])
+            /*
+            5. Por ultimo agregamos la busqueda. Nota que la contruccion del
+            array que va dentro del andFilterWhere() esta compuesto de la
+            siguiente manera ['ilike', 'nombreTabla.nombreColumna', $this->getAttribute('nombreRelacion.atributo')]
+             */
+            ->andFilterWhere(['ilike', 'usuarios.nombre', $this->getAttribute('usuario.nombre')]);
+
+        // var_dump($query->createCommand()->sql);
+        // die();
 
         return $dataProvider;
     }

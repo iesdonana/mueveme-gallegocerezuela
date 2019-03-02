@@ -30,6 +30,10 @@ $this->params['breadcrumbs'][] = $this->title;
             'descripcion:ntext',
             'url:url',
             'usuario_id',
+            /*
+            1. Ponemos el el atributo que es relacion.atributo
+             */
+            'usuario.nombre',
             //'categoria_id',
             //'created_at',
 

@@ -167,7 +167,7 @@ class Usuarios extends \yii\db\ActiveRecord implements \yii\web\IdentityInterfac
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getNoticias()
+    public function getNoticias0()
     {
         return $this->hasMany(Noticias::className(), ['id' => 'noticia_id'])->viaTable('movimientos', ['usuario_id' => 'id'])->inverseOf('usuario');
     }
@@ -175,7 +175,7 @@ class Usuarios extends \yii\db\ActiveRecord implements \yii\web\IdentityInterfac
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getNoticias0()
+    public function getNoticias()
     {
         return $this->hasMany(Noticias::className(), ['usuario_id' => 'id']);
     }
